@@ -1,0 +1,64 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# IDE and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Test coverage
+coverage/
+
+# TypeScript cache
+*.tsbuildinfo
+
+# Temporary files
+tmp/
+temp/
+
+# AI Generator Output (Local)
+.cursorrules
+.windsurfrules
+.clinerules
+.roo-clinerules
+.aider.conf.yml
+AI_INSTRUCTIONS.md
+CLAUDE_INSTRUCTIONS.md
+GEMINI_INSTRUCTIONS.md
+CODEX_INSTRUCTIONS.md
+
+# Internal documentation (non-essential .md files)
+CONTEXT.md
+IMPROVEMENTS.md
+PROGRESS.md
+PROJECT-REPORT.md
+SPEC.md
+SUGGESTIONS.md
+GUIDE.md
+OVERVIEW.md
+Execution Prompt.md
+OPTIMIZATION_GUIDE.md
+ROADMAP.md
+
+# Playwright
+test-results/

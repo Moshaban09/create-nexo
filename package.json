@@ -1,0 +1,86 @@
+{
+  "name": "create-nexo",
+  "version": "1.5.0",
+  "description": "NEXO is a next-generation, extensible CLI for scaffolding and orchestrating modern frontend projects",
+  "type": "module",
+  "bin": {
+    "nexo": "dist/bin/nexo.js"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "npm run type-check && node scripts/build.js",
+    "build:dev": "tsc",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch",
+    "dev:test": "npm run build:dev && npm run start",
+    "start": "node dist/bin/nexo.js",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:snapshot": "vitest run tests/snapshots",
+    "bench": "vitest bench",
+    "type-check": "tsc --noEmit",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor"
+  },
+  "keywords": [
+    "cli",
+    "scaffold",
+    "scaffolding",
+    "vite",
+    "react",
+    "react19",
+    "frontend",
+    "generator",
+    "create-react-app",
+    "boilerplate",
+    "starter",
+    "template",
+    "typescript",
+    "tailwind",
+    "shadcn"
+  ],
+  "author": "Mohamed Shaban",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Moshaban09/create-nexo.git"
+  },
+  "homepage": "https://nexo-site-ten.vercel.app/",
+  "bugs": {
+    "url": "https://github.com/Moshaban09/create-nexo/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "preferGlobal": true,
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "commander": "^12.1.0",
+    "execa": "^8.0.0",
+    "ora": "^8.0.0",
+    "picocolors": "^1.1.0",
+    "validate-npm-package-name": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/validate-npm-package-name": "^4.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "@vitest/coverage-v8": "^2.1.0",
+    "esbuild": "^0.24.0",
+    "eslint": "^8.57.0",
+    "prettier": "^3.2.0",
+    "typescript": "^5.4.2",
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
