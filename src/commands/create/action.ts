@@ -112,6 +112,43 @@ export async function createAction(name: string | undefined, options: CreateOpti
       });
     }
 
+    // 5. Auto Install Dependencies
+    if (selections.installDependencies) {
+      const installSpinner = p.spinner();
+      const startInstall = performance.now();
+      installSpinner.start('Installing dependencies...');
+
+      try {
+        const pm = (selections.packageManager || 'npm') as PackageManagerName;
+        const installCmd = getInstallCommand(pm, { audit: options.audit, strict: options.strict });
+        const [cmd, ...args] = installCmd.split(' ');
+
+        const { execa } = await import('execa');
+        await execa(cmd, args, {
+          cwd: projectPath,
+          stdio: 'ignore'
+        });
+
+        const installTime = ((performance.now() - startInstall) / 1000).toFixed(2);
+        installSpinner.stop(pc.green(`✔ Dependencies installed successfully in ${installTime}s!`));
+
+        // Prefetch Stats Summary
+        const { prefetchedStats } = await import('../../utils/prefetch.js');
+        if (prefetchedStats.successCount > 0) {
+          log.newline();
+          log.dim('  📦 Prefetch Summary:');
+          log.print(`  ${pc.green('✓')} Cached: ${prefetchedStats.successCount} packages`);
+          log.dim(`  ⚡ Speed boost active for next runs`);
+        } else if (prefetchedStats.failCount > 0) {
+           // Silent or minimal warning if needed, but per plan we keep it clean.
+           // Maybe just debug log
+        }
+      } catch (err) {
+        installSpinner.stop(pc.red('✖ Failed to install dependencies.'));
+        log.warn('You can try installing manually.');
+      }
+    }
+
     // 5. Success Reporting
     const duration = ((Date.now() - startTime) / 1000).toFixed(2);
     p.outro(pc.green(`✨ Project created successfully in ${duration}s!`));
@@ -168,12 +205,15 @@ function reportNextSteps(selections: UserSelections, options: CreateOptions) {
   log.dim('Next steps:');
   log.dim(`  cd ${selections.projectName}`);
 
-  if (selectedPM === 'npm') {
-    log.newline();
-    log.success(isAudited ? '  🛡️  Install with security audit enabled:' : '  ⚡ Install with speed optimizations:');
+  if (!selections.installDependencies) {
+    if (selectedPM === 'npm') {
+      log.newline();
+      log.success(isAudited ? '  🛡️  Install with security audit enabled:' : '  ⚡ Install with speed optimizations:');
+    }
+
+    log.dim(`  ${installCmd}`);
   }
 
-  log.dim(`  ${installCmd}`);
   log.newline();
   log.dim(`  ${devCmd}`);
   log.newline();

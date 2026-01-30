@@ -2,13 +2,13 @@
 import { execa } from 'execa';
 import pc from 'picocolors';
 import {
-  calculateBackoffDelay,
-  DEFAULT_RETRY_CONFIG,
-  NetworkError,
-  OfflineError,
-  RateLimitError,
-  RetryConfig,
-  sleep,
+    calculateBackoffDelay,
+    DEFAULT_RETRY_CONFIG,
+    NetworkError,
+    OfflineError,
+    RateLimitError,
+    RetryConfig,
+    sleep,
 } from '../errors/index.js';
 import { spinner } from './spinner.js';
 
@@ -117,9 +117,8 @@ export const cloneTemplate = async (
     const s = spinner(attemptLabel);
 
     try {
-      // Use npx tiged to avoid local dependency
-      // tiged is a faster fork of degit
-      await execa('npx', ['tiged', repo, targetDir, '--force']);
+      // Use locally installed tiged
+      await execa('tiged', [repo, targetDir, '--force']);
       s.succeed('Template cloned successfully');
       return;
     } catch (error) {

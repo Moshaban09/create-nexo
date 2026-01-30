@@ -9,6 +9,41 @@ export interface PackageManagerInfo {
 }
 
 /**
+ * Detect the package manager used to run the CLI
+ */
+export const detectPackageManagerUsed = (): PackageManagerName => {
+  const userAgent = process.env.npm_config_user_agent;
+
+  if (userAgent) {
+    if (userAgent.startsWith('pnpm')) return 'pnpm';
+    if (userAgent.startsWith('yarn')) return 'yarn';
+    if (userAgent.startsWith('bun')) return 'bun';
+  }
+
+  return 'npm';
+};
+
+/**
+ * Get the prefetch command for the generic package manager
+ */
+export const getPrefetchCommand = (pm: PackageManagerName): { command: string, args: string[] } | null => {
+  switch (pm) {
+    case 'npm':
+      return { command: 'npm', args: ['cache', 'add'] };
+    case 'pnpm':
+      return { command: 'pnpm', args: ['store', 'add'] };
+    case 'yarn':
+      return { command: 'yarn', args: ['cache', 'add'] };
+    case 'bun':
+      // Bun is extremely fast and doesn't have a direct 'cache add' equivalent that is commonly used.
+      // Its install speed often negates the need for background prefetching.
+      return null;
+    default:
+      return { command: 'npm', args: ['cache', 'add'] };
+  }
+};
+
+/**
  * Detect available package managers on the system
  */
 export const detectAvailableManagers = (): PackageManagerName[] => {

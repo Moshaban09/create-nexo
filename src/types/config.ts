@@ -27,6 +27,7 @@ export interface UserSelections {
   // Variant flags
   hasCompiler?: boolean;
   hasSWC?: boolean;
+  installDependencies?: boolean;
   packageManager?: string;
 }
 

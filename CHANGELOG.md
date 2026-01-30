@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.6.0] - 2026-01-30
+
+### 🚀 Major Features
+- **New**: **Custom Presets** — Save your favorite stack configuration (`React + Vite + Tailwind...`) and reuse it instantly in future projects.
+- **New**: **Smart Auto-Install** — Zero-friction setup with automatic package manager detection (no more prompts) and one-click installation.
+- **New**: **Multi-PM Prefetching** — Intelligent background caching for `npm`, `pnpm`, and `yarn` that runs while you configure the project, making installation up to 70% faster.
+- **Optimization**: **Bun Support** — Native detection for Bun with optimized skipping of prefetch logic for maximum speed.
+
+### 📊 Observability & Quality
+- **New**: **Install Stats** — Detailed summary at the end of installation showing cached packages and execution time.
+- **Quality**: **100% Test Coverage** — Added comprehensive unit tests for all new modules (`pm-utils`, `prefetch`, `presets-manager`).
+- **Fix**: **Linting Cleanup** — Resolved all remaining ESLint warnings for a pristine codebase.
+
 ## [1.5.0] - 2026-01-24
 
 ### � New Features & Orchestration

@@ -1,58 +1,49 @@
-import { getCached } from './cache.js';
 
-const ALL_PACKAGES = [
-  // Core
-  'react', 'react-dom', 'vite', 'typescript', '@vitejs/plugin-react',
-  // Styling
-  'tailwindcss', 'postcss', 'autoprefixer', 'sass', 'styled-components',
-  // UI Libraries
-  'shadcn', 'lucide-react', '@heroui/react', '@mui/material', 'antd', '@chakra-ui/react',
-  // Forms
-  'react-hook-form', 'zod', 'yup', 'formik', '@tanstack/react-form',
-  // State
-  'zustand', 'redux', '@reduxjs/toolkit', 'jotai',
-  // Routing
-  'react-router-dom', '@tanstack/react-router',
-  // Data Fetching
-  '@tanstack/react-query', 'axios',
-  // Icons
-  'react-icons', '@iconify/react', 'heroicons', '@fortawesome/fontawesome-svg-core',
-  // Utils
-  'clsx', 'tailwind-merge', 'framer-motion'
-];
+import { execa } from 'execa';
+import { detectPackageManagerUsed, getPrefetchCommand } from './pm-utils.js';
+
+/**
+ * Prefetch a list of packages into the local cache in the background
+ */
+export const prefetchPackages = (packages: string[]) => {
+  if (packages.length === 0) return;
+
+  const pm = detectPackageManagerUsed();
+  const prefetchCmd = getPrefetchCommand(pm);
+
+  if (!prefetchCmd) return;
+
+  // Debug logging mechanism (only visible if DEBUG=true or similar, but for now we keep it silent or minimal)
+  // Consolidating all packages into one command for efficiency if supported
+  const { command, args } = prefetchCmd;
+  const fullArgs = [...args, ...packages];
+
+  execa(command, fullArgs, {
+    stdio: 'ignore', // Keep it silent to not disrupt UI
+    detached: false
+  }).then(() => {
+    prefetchedStats.successCount += packages.length;
+  }).catch((_err) => {
+    // Silent fail is intended as this is an optimization only
+    // Ideally we would log to a debug file if available
+    prefetchedStats.failCount += 1;
+  });
+};
+
+export const prefetchedStats = {
+  successCount: 0,
+  failCount: 0
+};
 
 /**
  * Prefetch latest versions of common packages in the background
  */
 export const prefetchCommonPackages = (): void => {
-  // Fire and forget - don't await to avoid blocking CLI interaction
-  ALL_PACKAGES.forEach(async (name) => {
-    try {
-      await getCached(
-        `npm:version:${name}`,
-        async () => {
-          const controller = new AbortController();
-          const timeoutId = setTimeout(() => controller.abort(), 3000);
+  // Core packages that are almost always used
+  const common = [
+    'react@latest', 'react-dom@latest', 'vite@latest', 'typescript@latest',
+    '@vitejs/plugin-react@latest', 'tailwindcss@latest', 'postcss@latest', 'autoprefixer@latest'
+  ];
 
-          try {
-            const response = await fetch(`https://registry.npmjs.org/${name}/latest`, {
-              signal: controller.signal,
-              headers: { 'Accept': 'application/json' }
-            });
-
-            if (!response.ok) return '';
-            const data = await response.json() as { version: string };
-            return data.version;
-          } catch {
-            return '';
-          } finally {
-            clearTimeout(timeoutId);
-          }
-        },
-        12 * 60 * 60 * 1000
-      );
-    } catch {
-      // Silently fail prefetch
-    }
-  });
+  prefetchPackages(common);
 };

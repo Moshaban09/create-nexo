@@ -37,10 +37,10 @@ describe('github-utils', () => {
       vi.clearAllMocks();
     });
 
-    it('should call execa with npx tiged', async () => {
+    it('should call execa with tiged', async () => {
       await cloneTemplate('user/repo', './target');
 
-      expect(execa).toHaveBeenCalledWith('npx', ['tiged', 'user/repo', './target', '--force']);
+      expect(execa).toHaveBeenCalledWith('tiged', ['user/repo', './target', '--force']);
     });
 
     it('should throw error if execa fails', async () => {

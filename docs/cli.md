@@ -103,6 +103,7 @@ nexo presets
 - `landing` - Landing page with animations
 - `dashboard` - Admin dashboard template
 - `minimal` - Minimal setup
+- `[Custom]` - Your saved presets from `nexo create`
 
 ---
 

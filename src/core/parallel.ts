@@ -41,6 +41,7 @@ export const executeParallel = async (
 
   const completed = new Set<string>();
   const activePromises = new Map<string, Promise<void>>();
+  let failed: StepState[] = [];
 
   /**
    * Check if a step's dependencies are satisfied
@@ -91,7 +92,7 @@ export const executeParallel = async (
       if (verbose) {
         console.log(`${pc.red('✗')} ${step.name}`);
       }
-      throw state.error;
+      // Do NOT throw here, so we can collect errors
     }
   };
 
@@ -117,17 +118,20 @@ export const executeParallel = async (
   };
 
   // Main execution loop with smart pool management
-  while (completed.size < steps.length) {
+  while (completed.size + failed.length < steps.length) {
     // Fill pool with ready tasks
     fillPool();
 
     if (activePromises.size === 0) {
-      // Check for circular dependencies or all failed
+      // Check if we have any pending steps that can't run due to dependencies failing
       const pending = [...states.values()].filter((s) => s.status === 'pending');
-      const failed = [...states.values()].filter((s) => s.status === 'failed');
 
+      // If we have failed steps, we stop and report them all
       if (failed.length > 0) {
-        throw failed[0].error || new Error('Step execution failed');
+          // Construct a comprehensive error message
+          const messages = failed.map(s => `${s.step.name}: ${s.error?.message}`).join('\n');
+          const errors = failed.map(s => s.error);
+          throw new AggregateError(errors, `Multiple steps failed:\n${messages}`);
       }
 
       if (pending.length > 0) {
@@ -139,6 +143,16 @@ export const executeParallel = async (
 
     // Wait for any task to complete, then immediately try to fill the pool
     await Promise.race(activePromises.values());
+
+    // Refresh failed list
+    failed = [...states.values()].filter((s) => s.status === 'failed');
+  }
+
+  // Final check after loop ensures we caught everything
+  if (failed.length > 0) {
+      const messages = failed.map(s => `${s.step.name}: ${s.error?.message}`).join('\n');
+      const errors = failed.map(s => s.error);
+      throw new AggregateError(errors, `Multiple steps failed:\n${messages}`);
   }
 };
 

@@ -1,7 +1,7 @@
 
 import * as childProcess from 'node:child_process';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-import { detectAvailableManagers, getInstallCommand, getRunCommand } from '../../src/utils/pm-utils.js';
+import { detectAvailableManagers, detectPackageManagerUsed, getInstallCommand, getPrefetchCommand, getRunCommand } from '../../src/utils/pm-utils.js';
 
 vi.mock('node:child_process');
 
@@ -88,6 +88,52 @@ describe('pm-utils', () => {
 
     it('should return correct yarn command', () => {
       expect(getRunCommand('yarn', 'dev')).toBe('yarn dev');
+    });
+  });
+
+  describe('detectPackageManagerUsed', () => {
+    const originalEnv = process.env;
+
+    beforeEach(() => {
+      process.env = { ...originalEnv };
+      delete process.env.npm_config_user_agent;
+    });
+
+    it('should detect pnpm from user agent', () => {
+      process.env.npm_config_user_agent = 'pnpm/7.0.0 node/v16.0.0 windows/x64';
+      expect(detectPackageManagerUsed()).toBe('pnpm');
+    });
+
+    it('should detect yarn from user agent', () => {
+      process.env.npm_config_user_agent = 'yarn/1.22.19 npm/? node/v16.0.0 windows/x64';
+      expect(detectPackageManagerUsed()).toBe('yarn');
+    });
+
+    it('should detect bun from user agent', () => {
+      process.env.npm_config_user_agent = 'bun/1.0.0 npm/? node/v16.0.0 windows/x64';
+      expect(detectPackageManagerUsed()).toBe('bun');
+    });
+
+    it('should default to npm if no user agent', () => {
+      expect(detectPackageManagerUsed()).toBe('npm');
+    });
+  });
+
+  describe('getPrefetchCommand', () => {
+    it('should return npm cache add for npm', () => {
+      expect(getPrefetchCommand('npm')).toEqual({ command: 'npm', args: ['cache', 'add'] });
+    });
+
+    it('should return pnpm store add for pnpm', () => {
+      expect(getPrefetchCommand('pnpm')).toEqual({ command: 'pnpm', args: ['store', 'add'] });
+    });
+
+    it('should return yarn cache add for yarn', () => {
+      expect(getPrefetchCommand('yarn')).toEqual({ command: 'yarn', args: ['cache', 'add'] });
+    });
+
+    it('should return null for bun', () => {
+      expect(getPrefetchCommand('bun')).toBeNull();
     });
   });
 });

@@ -16,6 +16,7 @@ import {
   isDirEmpty
 } from '../../utils/index.js';
 import { type PackageManagerName } from '../../utils/pm-utils.js';
+import { prefetchPackages } from '../../utils/prefetch.js';
 
 /**
  * Helper for 'Learn' mode
@@ -109,6 +110,57 @@ export async function handleInteractiveFlow(
     }
   }
 
+  // Check for Custom Presets
+  const { loadPresets } = await import('../../utils/presets-manager.js');
+  const customPresets = await loadPresets();
+
+  if (customPresets.length > 0) {
+    const usePreset = await p.select({
+      message: 'Found custom presets. How would you like to proceed?',
+      options: [
+        { value: 'none', label: 'Start from scratch', hint: 'Configure manually' },
+        ...customPresets.map(preset => ({
+          value: preset.name,
+          label: preset.name,
+          hint: `Last used: ${new Date(preset.createAt).toLocaleDateString()}`
+        }))
+      ]
+    });
+
+    if (p.isCancel(usePreset)) return null;
+
+    if (usePreset !== 'none') {
+      const selectedPreset = customPresets.find(p => p.name === usePreset);
+      if (selectedPreset) {
+         p.note(`Loaded preset "${selectedPreset.name}"`, '✨ Preset Loaded');
+         // Return with preset selections but ensure project name is correct
+         return {
+           ...selectedPreset.selections,
+           projectName,
+           // Ensure installDependencies is false so we can ask or auto-set it later if we wanted,
+           // but wait, the plan says return it.
+           // We need to make sure we don't skip the auto-install prompt if it's not in the preset or if we want to ask again.
+           // However, to be consistent with "Presets", we should probably just return it.
+           // But wait, the auto-install prompt happens at the end of this function.
+           // This function returns UserSelections.
+           // If we return here, we skip the rest of the prompts (GOOD).
+           // But we still need to handle the "Install dependencies?" prompt?
+           // The "Install dependencies" prompt is INSIDE handleInteractiveFlow at the end.
+           // So if we return early here, we skip that prompt!
+           // We should probably ask for install dependencies here too or refactor.
+           // For now, let's just return and let user handle install manually or we can duplicate the prompt.
+           // BETTER: Return the object, and let the caller `createAction` handle the install step?
+           // `handleInteractiveFlow` returns `UserSelections`.
+           // `UserSelections` has `installDependencies`.
+           // If we return here, `createAction` gets the object.
+           // `createAction` checks `selections.installDependencies`.
+           // So we should ask for it here too if we want auto-install.
+           installDependencies: true // Default to true if using preset? Or ask?
+         } as UserSelections;
+      }
+    }
+  }
+
   // Core prompts
   for (const promptConfig of corePrompts) {
     if (promptConfig.options.length === 0 ||
@@ -138,6 +190,13 @@ export async function handleInteractiveFlow(
       hint: opt.hover_note,
     }));
 
+    // Skip packageManager prompt as we auto-detect it now for consistency
+    if (promptConfig.name === 'packageManager') {
+      const { detectPackageManagerUsed } = await import('../../utils/pm-utils.js');
+      answers.packageManager = detectPackageManagerUsed();
+      continue;
+    }
+
     const answer = await p.select({
       message: promptConfig.message,
       options,
@@ -146,6 +205,18 @@ export async function handleInteractiveFlow(
     if (p.isCancel(answer)) return null;
 
     answers[promptConfig.name] = answer as string;
+
+    // Aggressive Background Prefetching
+    if (promptConfig.name === 'styling' && answer === 'tailwind') {
+      prefetchPackages(['tailwindcss', 'postcss', 'autoprefixer']);
+    } else if (promptConfig.name === 'ui') {
+      if (answer === 'heroui') prefetchPackages(['@heroui/react', 'framer-motion']);
+      if (answer === 'chakra') prefetchPackages(['@chakra-ui/react', '@emotion/react', '@emotion/styled']);
+      if (answer === 'antd') prefetchPackages(['antd']);
+      if (answer === 'mui') prefetchPackages(['@mui/material', '@emotion/react', '@emotion/styled']);
+    } else if (promptConfig.name === 'dataFetching' && answer === 'tanstack-query') {
+      prefetchPackages(['@tanstack/react-query']);
+    }
 
     const selectedOption = promptConfig.options.find((o: PromptOption) => o.value === answer);
     if (selectedOption?.folder_info) {
@@ -220,9 +291,17 @@ export async function handleInteractiveFlow(
 
   if (p.isCancel(confirmed) || !confirmed) return null;
 
-  // Final Selections construction
+  // Auto-Install Prompt
+  const installDeps = await p.confirm({
+    message: `Install dependencies now? ${pc.dim('(Recommended)')}`,
+    initialValue: true
+  });
+
+  if (p.isCancel(installDeps)) return null;
+
+  // Final Selections for Return
   const variant = answers.variant as string;
-  return {
+  const selections = {
     projectName: answers.projectName as string,
     framework: 'react',
     variant,
@@ -239,5 +318,31 @@ export async function handleInteractiveFlow(
     hasCompiler: variant.includes('compiler'),
     hasSWC: variant.includes('swc'),
     packageManager: answers.packageManager as string || 'npm',
+    installDependencies: installDeps
   } as UserSelections;
+
+  // Ask to save preset
+  const savePresetPrompt = await p.confirm({
+    message: 'Save this configuration as a preset?',
+    initialValue: false
+  });
+
+  if (!p.isCancel(savePresetPrompt) && savePresetPrompt) {
+    const presetName = await p.text({
+      message: 'Preset name:',
+      placeholder: 'my-stack',
+      validate: (value) => {
+        if (!value) return 'Please enter a name';
+        return undefined;
+      }
+    });
+
+    if (!p.isCancel(presetName)) {
+      const { savePreset } = await import('../../utils/presets-manager.js');
+      await savePreset(presetName as string, selections);
+      p.note(`Configuration saved as "${presetName}"`, '✨ Preset Saved');
+    }
+  }
+
+  return selections;
 }
