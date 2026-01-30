@@ -8,17 +8,17 @@ const UI_CONFIGS: Record<string, Record<string, string>> = {
     '@radix-ui/react-slot': '^1.1.0',
     'class-variance-authority': '^0.7.1',
     'clsx': '^2.1.1',
-    'tailwind-merge': '^2.6.0',
+    'tailwind-merge': '^3.4.0',
   },
   radix: {
-    '@radix-ui/react-dialog': '^1.1.0',
-    '@radix-ui/react-dropdown-menu': '^2.1.0',
-    '@radix-ui/react-slot': '^1.1.0',
+    '@radix-ui/react-dialog': '^1.4.0',
+    '@radix-ui/react-dropdown-menu': '^2.1.4',
+    '@radix-ui/react-slot': '^1.1.1',
   },
 
   heroui: {
-    '@heroui/react': '^2.7.0',
-    'framer-motion': '^11.11.11',
+    '@heroui/react': '^2.8.0',
+    'framer-motion': '^12.0.0',
   },
   mui: {
     '@mui/material': '^7.3.7',
@@ -26,14 +26,15 @@ const UI_CONFIGS: Record<string, Record<string, string>> = {
     '@emotion/styled': '^11.14.0',
   },
   antd: {
-    'antd': '^5.23.0',
+    'antd': '^6.0.0',
+    '@ant-design/icons': '^6.0.0',
   },
   chakra: {
-    '@chakra-ui/react': '^3.3.0',
+    '@chakra-ui/react': '^3.31.0',
     '@emotion/react': '^11.14.0',
   },
   'styled-components': {
-    'styled-components': '^6.1.14',
+    'styled-components': '^6.3.8',
   },
 
 };

@@ -6,14 +6,14 @@ export const stylingConfigurator = async (ctx: ConfiguratorContext): Promise<voi
   const { variant } = ctx.selections;
   const isTypeScript = variant.startsWith('ts');
   const configExt = isTypeScript ? 'ts' : 'js';
-
+  const isRtl = ctx.selections.rtl === true;
 
   switch (ctx.selections.styling) {
     case 'tailwind':
       // React with Vite uses @tailwindcss/vite plugin
       if (ctx.pkg) {
-        ctx.pkg.add('tailwindcss', '^4.0.0', true);
-        ctx.pkg.add('@tailwindcss/vite', '^4.0.0', true);
+        ctx.pkg.add('tailwindcss', '^4.1.0', true);
+        ctx.pkg.add('@tailwindcss/vite', '^4.1.0', true);
       }
 
       // Update vite.config with @tailwindcss/vite plugin
@@ -34,7 +34,19 @@ export default defineConfig({
 `;
       await writeFile(path.join(ctx.projectPath, `vite.config.${configExt}`), viteConfig);
 
-      const cssContent = `@import "tailwindcss";`;
+      const cssContent = `@import "tailwindcss";
+${isRtl ? `
+@theme {
+  --font-sans: "Cairo", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  font-family: var(--font-sans);
+}
+
+body {
+  text-align: right;
+}` : ''}`;
       await ensureDir(path.join(ctx.projectPath, 'src'));
       await writeFile(path.join(ctx.projectPath, 'src', 'index.css'), cssContent);
       break;
@@ -43,7 +55,7 @@ export default defineConfig({
       await ensureDir(path.join(ctx.projectPath, 'src'));
       await writeFile(
         path.join(ctx.projectPath, 'src', 'index.css'),
-        `/* CSS Modules - import styles from './Component.module.css' */\n:root {\n  font-family: system-ui, sans-serif;\n}\n`
+        `/* CSS Modules - import styles from './Component.module.css' */\n:root {\n  font-family: ${isRtl ? "'Cairo', " : ''}system-ui, sans-serif;\n}\n${isRtl ? 'body { text-align: right; }\n' : ''}`
       );
       break;
 
@@ -51,7 +63,7 @@ export default defineConfig({
 
     case 'sass':
       if (ctx.pkg) {
-        ctx.pkg.add('sass', '^1.77.0', true);
+        ctx.pkg.add('sass', '^1.90.0', true);
       }
       await ensureDir(path.join(ctx.projectPath, 'src'));
       await ensureDir(path.join(ctx.projectPath, 'src', 'styles'));
@@ -65,7 +77,7 @@ export default defineConfig({
       // Create variables file
       await writeFile(
         path.join(ctx.projectPath, 'src', 'styles', '_variables.scss'),
-        `// Colors\n$primary: #646cff;\n$secondary: #535bf2;\n$background: #ffffff;\n$text: #213547;\n\n// Typography\n$font-family: system-ui, -apple-system, sans-serif;\n$font-size-base: 16px;\n\n// Spacing\n$spacing-unit: 8px;\n`
+        `// Colors\n$primary: #646cff;\n$secondary: #535bf2;\n$background: #ffffff;\n$text: #213547;\n\n// Typography\n$font-family: ${isRtl ? "'Cairo', " : ''}system-ui, -apple-system, sans-serif;\n$font-size-base: 16px;\n\n// Spacing\n$spacing-unit: 8px;\n`
       );
 
       // Create mixins file

@@ -7,8 +7,8 @@ export const testingConfigurator = async (ctx: ConfiguratorContext): Promise<voi
 
   if (ctx.pkg) {
     if (testing === 'vitest') {
-      ctx.pkg.add('vitest', '^3.0.0', true);
-      ctx.pkg.add('@testing-library/react', '^16.0.0', true);
+      ctx.pkg.add('vitest', '^3.4.0', true);
+      ctx.pkg.add('@testing-library/react', '^16.3.0', true);
       ctx.pkg.add('@testing-library/dom', '^10.0.0', true);
       ctx.pkg.add('jsdom', '^26.0.0', true);
 
@@ -18,7 +18,7 @@ export const testingConfigurator = async (ctx: ConfiguratorContext): Promise<voi
     } else if (testing === 'jest') {
       ctx.pkg.add('jest', '^29.7.0', true);
       ctx.pkg.add('jest-environment-jsdom', '^29.7.0', true);
-      ctx.pkg.add('@testing-library/react', '^16.0.0', true);
+      ctx.pkg.add('@testing-library/react', '^16.3.0', true);
       ctx.pkg.add('@testing-library/dom', '^10.0.0', true);
       ctx.pkg.add('@types/jest', '^29.5.0', true);
       ctx.pkg.add('ts-jest', '^29.1.0', true);

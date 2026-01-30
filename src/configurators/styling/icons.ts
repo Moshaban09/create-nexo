@@ -2,7 +2,7 @@ import { createDependencyConfigurator } from '../factory.js';
 
 const ICONS_CONFIGS = {
   lucide: {
-    'lucide-react': '^0.474.0',
+    'lucide-react': '^0.563.0',
   },
   'react-icons': {
     'react-icons': '^5.5.0',

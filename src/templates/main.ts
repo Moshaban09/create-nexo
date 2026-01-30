@@ -53,8 +53,9 @@ export const createMainFile = async (
     providers.push({ start: '<ChakraProvider value={defaultSystem}>', end: '</ChakraProvider>' });
 
   } else if (ui === 'antd') {
+    const isRtl = ctx.selections.rtl === true;
     imports.push("import { ConfigProvider } from 'antd'");
-    providers.push({ start: '<ConfigProvider>', end: '</ConfigProvider>' });
+    providers.push({ start: `<ConfigProvider${isRtl ? ' direction="rtl"' : ''}>`, end: '</ConfigProvider>' });
   } else if (ui === 'styled-components') {
     imports.push("import { ThemeProvider } from 'styled-components'");
     // We need a default theme object, usually imported or defined.
@@ -69,7 +70,7 @@ export const createMainFile = async (
   let renderApp = '<App />';
 
   if (routing === 'react-router') {
-    imports.push("import { createBrowserRouter, RouterProvider } from 'react-router-dom'");
+    imports.push("import { createBrowserRouter, RouterProvider } from 'react-router'");
     routerSetup = `
 const router = createBrowserRouter([
   {

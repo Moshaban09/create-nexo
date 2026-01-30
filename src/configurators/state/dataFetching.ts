@@ -6,10 +6,10 @@ export const dataFetchingConfigurator = async (ctx: ConfiguratorContext): Promis
 
   if (ctx.pkg) {
     if (dataFetching === 'tanstack-query' && framework === 'react') {
-      ctx.pkg.add('@tanstack/react-query', '^5.59.0');
-      ctx.pkg.add('@tanstack/react-query-devtools', '^5.59.0');
+      ctx.pkg.add('@tanstack/react-query', '^5.90.0');
+      ctx.pkg.add('@tanstack/react-query-devtools', '^5.90.0');
     } else if (dataFetching === 'axios') {
-      ctx.pkg.add('axios', '^1.7.0');
+      ctx.pkg.add('axios', '^1.9.0');
     }
   }
 };

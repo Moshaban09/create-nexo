@@ -5,11 +5,11 @@ const STATE_CONFIGS: Record<string, Record<string, string>> = {
     'zustand': '^5.0.0',
   },
   redux: {
-    '@reduxjs/toolkit': '^2.5.0',
+    '@reduxjs/toolkit': '^2.11.0',
     'react-redux': '^9.2.0',
   },
   jotai: {
-    'jotai': '^2.11.0',
+    'jotai': '^2.17.0',
   },
 
 
