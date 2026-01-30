@@ -161,188 +161,219 @@ export async function handleInteractiveFlow(
     }
   }
 
-  // Core prompts
-  for (const promptConfig of corePrompts) {
-    if (promptConfig.options.length === 0 ||
-       (promptConfig.options.length === 1 && promptConfig.options[0].value === 'none')) {
-      answers[promptConfig.name] = 'none';
-      continue;
-    }
+  // Retry Loop
+  while (true) {
+    const answers: Record<string, string | string[]> = {
+      projectName,
+      packageManager: 'npm',
+    };
 
-    // Educational context
-    if (promptConfig.name === 'variant') {
-      explain('We recommend TypeScript for better type safety and developer experience.\nThe "React Compiler" variant uses the new experimental compiler for auto-memoization.');
-    } else if (promptConfig.name === 'styling') {
-      explain('Tailwind CSS offers a utility-first approach for rapid UI development.\nCSS Modules provide scoped CSS to avoid global conflicts.');
-    } else if (promptConfig.name === 'state') {
-      explain('Local state (useState) is sufficient for simple apps.\nZustand is a lightweight, scalable global state manager.\nRedux is powerful but has more boilerplate.');
-    } else if (promptConfig.name === 'dataFetching') {
-      explain('TanStack Query (React Query) handles caching, deduplication, and background updates automatically.');
-    } else if (promptConfig.name === 'packageManager') {
-      explain('pnpm and Bun are significantly faster than npm.\nWe recommend using them for faster installation times.');
-    }
+    // Check for Custom Presets (only on first run or if we want to re-offer them)
+    // For simplicity, let's keep custom presets check outside or inside?
+    // If we restart, we probably want to go through core prompts again.
+    // The custom preset logic returns early, so if we are here, we are likely in manual mode.
+    // However, if we restart, maybe user wants to pick a preset this time?
+    // Let's keep custom preset logic at the top, but since we are refactoring,
+    // let's put the loop AFTER directory checks but BEFORE prompts.
 
-    const options = promptConfig.options.map((opt: PromptOption) => ({
-      value: opt.value,
-      label: promptConfig.name === 'packageManager' && availableManagers.includes(opt.value as PackageManagerName) && opt.value !== 'npm'
-        ? `${opt.name} ${pc.green('(Recommended)')}`
-        : opt.name,
-      hint: opt.hover_note,
-    }));
+    // Core prompts
+    for (const promptConfig of corePrompts) {
+      if (promptConfig.options.length === 0 ||
+         (promptConfig.options.length === 1 && promptConfig.options[0].value === 'none')) {
+        answers[promptConfig.name] = 'none';
+        continue;
+      }
 
-    // Skip packageManager prompt as we auto-detect it now for consistency
-    if (promptConfig.name === 'packageManager') {
-      const { detectPackageManagerUsed } = await import('../../utils/pm-utils.js');
-      answers.packageManager = detectPackageManagerUsed();
-      continue;
-    }
+      // Educational context
+      if (promptConfig.name === 'variant') {
+        explain('We recommend TypeScript for better type safety and developer experience.\nThe "React Compiler" variant uses the new experimental compiler for auto-memoization.');
+      } else if (promptConfig.name === 'styling') {
+        explain('Tailwind CSS offers a utility-first approach for rapid UI development.\nCSS Modules provide scoped CSS to avoid global conflicts.');
+      } else if (promptConfig.name === 'state') {
+        explain('Local state (useState) is sufficient for simple apps.\nZustand is a lightweight, scalable global state manager.\nRedux is powerful but has more boilerplate.');
+      } else if (promptConfig.name === 'dataFetching') {
+        explain('TanStack Query (React Query) handles caching, deduplication, and background updates automatically.');
+      } else if (promptConfig.name === 'packageManager') {
+        explain('pnpm and Bun are significantly faster than npm.\nWe recommend using them for faster installation times.');
+      }
 
-    const answer = await p.select({
-      message: promptConfig.message,
-      options,
-    });
-
-    if (p.isCancel(answer)) return null;
-
-    answers[promptConfig.name] = answer as string;
-
-    // Aggressive Background Prefetching
-    if (promptConfig.name === 'styling' && answer === 'tailwind') {
-      prefetchPackages(['tailwindcss', 'postcss', 'autoprefixer']);
-    } else if (promptConfig.name === 'ui') {
-      if (answer === 'heroui') prefetchPackages(['@heroui/react', 'framer-motion']);
-      if (answer === 'chakra') prefetchPackages(['@chakra-ui/react', '@emotion/react', '@emotion/styled']);
-      if (answer === 'antd') prefetchPackages(['antd']);
-      if (answer === 'mui') prefetchPackages(['@mui/material', '@emotion/react', '@emotion/styled']);
-    } else if (promptConfig.name === 'dataFetching' && answer === 'tanstack-query') {
-      prefetchPackages(['@tanstack/react-query']);
-    }
-
-    const selectedOption = promptConfig.options.find((o: PromptOption) => o.value === answer);
-    if (selectedOption?.folder_info) {
-      p.note(selectedOption.folder_info.join('\n'), '📁 Folders');
-    }
-  }
-
-  // Optional features
-  const optionalFeatures = await p.multiselect({
-    message: 'Select optional features (Space to select):',
-    options: optionalFeaturesPrompt.options.map((opt: PromptOption) => ({
-      value: opt.value,
-      label: opt.name,
-      hint: opt.hover_note,
-    })),
-    required: false,
-  });
-
-  if (p.isCancel(optionalFeatures)) return null;
-  answers.optionalFeatures = optionalFeatures as string[];
-
-  // Sub-prompts
-  for (const feature of optionalFeatures as string[]) {
-    const subPrompt = optionalSubPrompts[feature];
-    if (subPrompt) {
-      const promptOptions = subPrompt.options.map((opt: PromptOption) => ({
+      const options = promptConfig.options.map((opt: PromptOption) => ({
         value: opt.value,
-        label: opt.name,
+        label: promptConfig.name === 'packageManager' && availableManagers.includes(opt.value as PackageManagerName) && opt.value !== 'npm'
+          ? `${opt.name} ${pc.green('(Recommended)')}`
+          : opt.name,
         hint: opt.hover_note,
       }));
 
-      const subAnswer = subPrompt.type === 'checkbox'
-        ? await p.multiselect({ message: subPrompt.message, options: promptOptions, required: false })
-        : await p.select({ message: subPrompt.message, options: promptOptions });
-
-      if (p.isCancel(subAnswer)) return null;
-      answers[feature] = subAnswer as string | string[];
-    }
-  }
-
-  // Summary Preview
-  const currentSelections: Partial<UserSelections> = {
-    framework: 'react',
-    variant: answers.variant as string,
-    styling: answers.styling as string,
-    ui: answers.ui as string,
-    forms: answers.forms as string,
-    state: answers.state as string,
-    routing: answers.routing as string,
-    dataFetching: answers.dataFetching as string,
-    icons: answers.icons as string,
-  };
-
-  const sizeKb = estimateBundleSize(currentSelections as UserSelections);
-  const summaryItems = [
-    `Project:        ${pc.cyan(answers.projectName as string)}`,
-    `Framework:      ${pc.cyan('react')}`,
-    `Variant:        ${pc.cyan(answers.variant as string)}`,
-    `Styling:        ${pc.cyan(answers.styling as string)}`,
-    `UI Library:     ${pc.cyan(answers.ui as string)}`,
-    `Forms:          ${pc.cyan(answers.forms as string)}`,
-    `State:          ${pc.cyan(answers.state as string)}`,
-    `Routing:        ${pc.cyan(answers.routing as string)}`,
-    `Bundle Est.:    ${pc.green(formatSize(sizeKb))} ${pc.dim('(Initial JS)')}`,
-  ];
-
-  p.note(summaryItems.join('\n'), '📋 Summary');
-
-  const confirmed = await p.confirm({
-    message: 'Create project with these settings?',
-  });
-
-  if (p.isCancel(confirmed) || !confirmed) return null;
-
-  // Auto-Install Prompt
-  const installDeps = await p.confirm({
-    message: `Install dependencies now? ${pc.dim('(Recommended)')}`,
-    initialValue: true
-  });
-
-  if (p.isCancel(installDeps)) return null;
-
-  // Final Selections for Return
-  const variant = answers.variant as string;
-  const selections = {
-    projectName: answers.projectName as string,
-    framework: 'react',
-    variant,
-    language: variant.startsWith('ts') ? 'typescript' : 'javascript',
-    styling: answers.styling as string,
-    ui: answers.ui as string,
-    forms: answers.forms as string,
-    state: answers.state as string,
-    routing: answers.routing as string,
-    dataFetching: answers.dataFetching as string,
-    icons: answers.icons as string,
-    structure: answers.structure as string,
-    aiInstructions: (answers.optionalFeatures as string[]).includes('ai-instructions') ? (answers['ai-instructions'] as string[]) : undefined,
-    hasCompiler: variant.includes('compiler'),
-    hasSWC: variant.includes('swc'),
-    packageManager: answers.packageManager as string || 'npm',
-    installDependencies: installDeps
-  } as UserSelections;
-
-  // Ask to save preset
-  const savePresetPrompt = await p.confirm({
-    message: 'Save this configuration as a preset?',
-    initialValue: false
-  });
-
-  if (!p.isCancel(savePresetPrompt) && savePresetPrompt) {
-    const presetName = await p.text({
-      message: 'Preset name:',
-      placeholder: 'my-stack',
-      validate: (value) => {
-        if (!value) return 'Please enter a name';
-        return undefined;
+      // Skip packageManager prompt as we auto-detect it now for consistency
+      if (promptConfig.name === 'packageManager') {
+        const { detectPackageManagerUsed } = await import('../../utils/pm-utils.js');
+        answers.packageManager = detectPackageManagerUsed();
+        continue;
       }
+
+      const answer = await p.select({
+        message: promptConfig.message,
+        options,
+      });
+
+      if (p.isCancel(answer)) return null;
+
+      answers[promptConfig.name] = answer as string;
+
+      // Aggressive Background Prefetching
+      if (promptConfig.name === 'styling' && answer === 'tailwind') {
+        prefetchPackages(['tailwindcss', 'postcss', 'autoprefixer']);
+      } else if (promptConfig.name === 'ui') {
+        if (answer === 'heroui') prefetchPackages(['@heroui/react', 'framer-motion']);
+        if (answer === 'chakra') prefetchPackages(['@chakra-ui/react', '@emotion/react', '@emotion/styled']);
+        if (answer === 'antd') prefetchPackages(['antd']);
+        if (answer === 'mui') prefetchPackages(['@mui/material', '@emotion/react', '@emotion/styled']);
+      } else if (promptConfig.name === 'dataFetching' && answer === 'tanstack-query') {
+        prefetchPackages(['@tanstack/react-query']);
+      }
+
+      const selectedOption = promptConfig.options.find((o: PromptOption) => o.value === answer);
+      if (selectedOption?.folder_info) {
+        p.note(selectedOption.folder_info.join('\n'), '📁 Folders');
+      }
+    }
+
+    // Optional features
+    const optionalFeatures = await p.multiselect({
+      message: 'Select optional features (Space to select):',
+      options: optionalFeaturesPrompt.options.map((opt: PromptOption) => ({
+        value: opt.value,
+        label: opt.name,
+        hint: opt.hover_note,
+      })),
+      required: false,
     });
 
-    if (!p.isCancel(presetName)) {
-      const { savePreset } = await import('../../utils/presets-manager.js');
-      await savePreset(presetName as string, selections);
-      p.note(`Configuration saved as "${presetName}"`, '✨ Preset Saved');
-    }
-  }
+    if (p.isCancel(optionalFeatures)) return null;
+    answers.optionalFeatures = optionalFeatures as string[];
 
-  return selections;
+    // Sub-prompts
+    for (const feature of optionalFeatures as string[]) {
+      const subPrompt = optionalSubPrompts[feature];
+      if (subPrompt) {
+        const promptOptions = subPrompt.options.map((opt: PromptOption) => ({
+          value: opt.value,
+          label: opt.name,
+          hint: opt.hover_note,
+        }));
+
+        const subAnswer = subPrompt.type === 'checkbox'
+          ? await p.multiselect({ message: subPrompt.message, options: promptOptions, required: false })
+          : await p.select({ message: subPrompt.message, options: promptOptions });
+
+        if (p.isCancel(subAnswer)) return null;
+        answers[feature] = subAnswer as string | string[];
+      }
+    }
+
+    // Summary Preview
+    const currentSelections: Partial<UserSelections> = {
+      framework: 'react',
+      variant: answers.variant as string,
+      styling: answers.styling as string,
+      ui: answers.ui as string,
+      forms: answers.forms as string,
+      state: answers.state as string,
+      routing: answers.routing as string,
+      dataFetching: answers.dataFetching as string,
+      icons: answers.icons as string,
+    };
+
+    const sizeKb = estimateBundleSize(currentSelections as UserSelections);
+    const summaryItems = [
+      `Project:        ${pc.cyan(answers.projectName as string)}`,
+      `Framework:      ${pc.cyan('react')}`,
+      `Variant:        ${pc.cyan(answers.variant as string)}`,
+      `Styling:        ${pc.cyan(answers.styling as string)}`,
+      `UI Library:     ${pc.cyan(answers.ui as string)}`,
+      `Forms:          ${pc.cyan(answers.forms as string)}`,
+      `State:          ${pc.cyan(answers.state as string)}`,
+      `Routing:        ${pc.cyan(answers.routing as string)}`,
+      `Bundle Est.:    ${pc.green(formatSize(sizeKb))} ${pc.dim('(Initial JS)')}`,
+    ];
+
+    p.note(summaryItems.join('\n'), '📋 Summary');
+
+    const confirmed = await p.confirm({
+      message: 'Create project with these settings?',
+    });
+
+    if (p.isCancel(confirmed)) return null;
+
+    if (!confirmed) {
+      const restart = await p.confirm({
+        message: 'Restart from beginning?',
+        initialValue: true
+      });
+
+      if (p.isCancel(restart) || !restart) return null;
+
+      // Clear console or just add space?
+      console.clear();
+      p.intro(pc.bgCyan(pc.black(' NEXO (Restarted) ')));
+      continue; // Restart loop
+    }
+
+    // Auto-Install Prompt
+    const installDeps = await p.confirm({
+      message: `Install dependencies now? ${pc.dim('(Recommended)')}`,
+      initialValue: true
+    });
+
+    if (p.isCancel(installDeps)) return null;
+
+    // Final Selections for Return
+    const variant = answers.variant as string;
+    const selections = {
+      projectName: answers.projectName as string,
+      framework: 'react',
+      variant,
+      language: variant.startsWith('ts') ? 'typescript' : 'javascript',
+      styling: answers.styling as string,
+      ui: answers.ui as string,
+      forms: answers.forms as string,
+      state: answers.state as string,
+      routing: answers.routing as string,
+      dataFetching: answers.dataFetching as string,
+      icons: answers.icons as string,
+      structure: answers.structure as string,
+      aiInstructions: (answers.optionalFeatures as string[]).includes('ai-instructions') ? (answers['ai-instructions'] as string[]) : undefined,
+      hasCompiler: variant.includes('compiler'),
+      hasSWC: variant.includes('swc'),
+      packageManager: answers.packageManager as string || 'npm',
+      installDependencies: installDeps,
+      rtl: (answers.optionalFeatures as string[]).includes('rtl-starter')
+    } as UserSelections;
+
+    // Ask to save preset
+    const savePresetPrompt = await p.confirm({
+      message: 'Save this configuration as a preset?',
+      initialValue: false
+    });
+
+    if (!p.isCancel(savePresetPrompt) && savePresetPrompt) {
+      const presetName = await p.text({
+        message: 'Preset name:',
+        placeholder: 'my-stack',
+        validate: (value) => {
+          if (!value) return 'Please enter a name';
+          return undefined;
+        }
+      });
+
+      if (!p.isCancel(presetName)) {
+        const { savePreset } = await import('../../utils/presets-manager.js');
+        await savePreset(presetName as string, selections);
+        p.note(`Configuration saved as "${presetName}"`, '✨ Preset Saved');
+      }
+    }
+
+    return selections;
+  }
 }
