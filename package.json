@@ -1,6 +1,6 @@
 {
   "name": "create-nexo",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "NEXO is a next-generation, extensible CLI for scaffolding and orchestrating modern frontend projects",
   "type": "module",
   "bin": {

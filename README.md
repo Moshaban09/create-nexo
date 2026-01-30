@@ -43,6 +43,36 @@ NEXO combines a cutting-edge tech stack with a powerful orchestration engine for
 
 ---
 
+## 📂 Project Structure
+
+NEXO generates a clean, scalable structure tailored to your choices (e.g., FSD, Feature-based).
+
+```plaintext
+my-app/
+├── public/              # Static assets
+├── src/
+│   ├── app/             # App providers & global layout
+│   ├── assets/          # Images, fonts, icons
+│   ├── components/      # Shared UI components
+│   ├── config/          # Environment & app config
+│   ├── features/        # Feature-based modules (slices)
+│   ├── hooks/           # Shared React hooks
+│   ├── lib/             # Utils, helpers, and third-party setups
+│   ├── pages/           # Route components
+│   ├── styles/          # Global styles (Tailwind/CSS Modules)
+│   ├── types/           # Shared TypeScript interfaces
+│   ├── App.tsx          # Main entry component
+│   └── main.tsx         # Application entry point
+├── .nexo/               # AI Context & Metadata
+├── .cursorrules         # AI-specific coding rules
+├── DOCS.md              # Documentation for your specific stack
+├── index.html
+├── package.json
+└── vite.config.ts
+```
+
+---
+
 ## 📦 Quick Start
 
 ```bash

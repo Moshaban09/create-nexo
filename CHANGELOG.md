@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.1] - 2026-01-30
+
+### 🐛 Fixes & Quality
+- **Fix**: **Routing Dependency** — Fixed `routingConfigurator` to correctly install `react-router-dom` instead of `react-router` for web projects.
+- **Quality**: **Linting Cleanup** — Resolved unused variables and constant conditions in `prompts.ts` for a cleaner codebase.
+
 ## [1.7.0] - 2026-01-30
 
 ### 🚀 Major Features

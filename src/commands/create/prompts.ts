@@ -34,10 +34,7 @@ export async function handleInteractiveFlow(
   projectName: string,
   targetDir: string
 ): Promise<UserSelections | null> {
-  const answers: Record<string, string | string[]> = {
-    projectName,
-    packageManager: 'npm',
-  };
+
 
   const availableManagers = detectAvailableManagers();
   const projectPath = path.resolve(targetDir, projectName);
@@ -162,6 +159,7 @@ export async function handleInteractiveFlow(
   }
 
   // Retry Loop
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const answers: Record<string, string | string[]> = {
       projectName,
@@ -376,4 +374,5 @@ export async function handleInteractiveFlow(
 
     return selections;
   }
+
 }
