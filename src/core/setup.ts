@@ -14,9 +14,9 @@ import type { ConfiguratorContext, UserSelections } from '../types/index.js';
 import { createProjectDir, spinner } from '../utils/index.js';
 import { log } from '../utils/logger.js';
 import {
-    getRequiredConfigurators,
-    loadConfigurator,
-    sortByDependencies,
+  getRequiredConfigurators,
+  loadConfigurator,
+  sortByDependencies,
 } from './lazy-loader.js';
 
 /**
@@ -61,8 +61,10 @@ const executeSequential = async (
     icons: 'Adding icon library',
     structure: 'Creating project structure',
     animation: 'Adding animation library',
-    mandatory: 'Adding mandatory features',
     'ai-instructions': 'Generating AI instructions',
+    testing: 'Setting up testing framework',
+    linting: 'Configuring linting and formatting',
+    docs: 'Generating documentation links',
   };
 
   for (const name of configuratorNames) {
@@ -89,7 +91,8 @@ const executeParallelOptimized = async (
   const phase1 = ['framework', 'variant', 'language']; // Sequential - dependencies
   const phase2 = ['styling', 'forms', 'state', 'routing', 'dataFetching', 'icons', 'structure', 'animation', 'ai-instructions']; // Parallel
   const phase3 = ['ui']; // Depends on styling
-  const phase4 = ['mandatory']; // Depends on all above
+  const phase4 = ['mandatory', 'docs']; // Depends on all above
+  const phase5 = ['testing', 'linting']; // Optional features
 
   const runPhase = async (names: string[], parallel = false) => {
     const toRun = names.filter(n => configuratorNames.includes(n));
@@ -110,6 +113,7 @@ const executeParallelOptimized = async (
   await runPhase(phase2, true);  // Parallel
   await runPhase(phase3, false);
   await runPhase(phase4, false);
+  await runPhase(phase5, true); // Parallel optional features
 };
 
 /**

@@ -143,6 +143,11 @@ export const configuratorRegistry: Record<string, LazyConfiguratorConfig> = {
     dependencies: ['mandatory'],
     condition: (ctx) => ctx.selections.linting !== undefined && ctx.selections.linting !== 'none',
   },
+  docs: {
+    loader: () => import('../configurators/project/docs.js'),
+    exportName: 'docsConfigurator',
+    dependencies: ['mandatory'],
+  },
 };
 
 // ============================================
