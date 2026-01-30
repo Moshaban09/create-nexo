@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.0] - 2026-01-30
+
+### 🚀 Major Features
+- **Security**: **Zero-Vulnerability Projects** — Updated all core libraries (Framer Motion v12, Ant Design v6, Tailwind Merge v3) to their latest secure versions.
+- **New**: **DOCS.md Generation** — Automatically creates a `DOCS.md` file with official documentation links for your specific tech stack.
+- **UX**: **Retry Logic** — Added smart retry prompt ("Restart from beginning?") in the CLI wizard if you decline the final summary.
+- **New**: **Arabic & RTL Native** — Core support for RTL direction, `lang="ar"` configuration, and professional Arabic typography (Cairo font).
+- **Optimization**: **Modernized Infrastructure** — Replaced `tiged` with `giget` for faster template cloning.
+- **UX**: **Premium Cleanup** — Simplified post-creation instructions and verified security.
+
 ## [1.6.0] - 2026-01-30
 
 ### 🚀 Major Features

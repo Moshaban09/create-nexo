@@ -23,20 +23,23 @@ NEXO combines a cutting-edge tech stack with a powerful orchestration engine for
 - 🎨 **Visual Excellence** — Premier styling with **Tailwind CSS v4**, Sass, and official **shadcn/ui** and **HeroUI** integrations.
 - 🧱 **Scalable Architecture** — Professionally scaffolded **FSD**, **Feature-based**, and **Clean Architecture** patterns.
 - 🧠 **AI-Native Context** — Auto-generated `.nexo/ai-context.md` for perfect alignment with modern AI coding agents.
+- 📚 **Smart Documentation** — Auto-generated `DOCS.md` with direct links to official documentation for your chosen stack.
 - ⚡ **Instant Setup** — Zero-latency I/O with memory-resident `package.json` management; saved exactly once per project.
 - 💾 **Custom Presets** — Save and reuse your favorite tech stacks (`~/.nexo/presets.json`) for one-click project creation.
 - ⚡ **Smart Prefetching** — Background caching for **npm**, **pnpm**, and **yarn** during setup, reducing install time by up to 70%.
+- 🌍 **Arabic & RTL Native** — Core support for RTL direction, `lang="ar"` configuration, and professional **Cairo font** integration.
 - 🚀 **Atomic Orchestration** — Combined Git operations and parallel module loading for lightning-fast command execution.
 - 🛠️ **Unified Maintenance** — Total project health, security, and bundle auditing via the single `check` command.
 - 👀 **Dry Run Safety** — Preview every file and structural change before they ever touch your disk.
-- 📦 **Zero-Dependency Binary** — Entire CLI is bundled into a single file (~226KB) for instant installation and startup.
+- 📦 **Zero-Dependency Binary** — Entire CLI is bundled into a single file (~340KB) for instant installation and startup.
 - 🚚 **Multi-PM Support** — Native detection and optimization for **pnpm**, **Bun**, and **Yarn**.
-- 🏗️ **Template Cloning** — Lightning-fast scaffolding using **GitHub templates** with `tiged` integration and **3-retry resilience**.
+- 🏗️ **Template Cloning** — Lightning-fast scaffolding using **GitHub templates** with `giget` integration and **3-retry resilience**.
 - 🛡️ **Pre-Write Safety** — Permission checks, disk space validation (100MB+), and Windows **MAX_PATH** protection.
 - 🔄 **Network Resilience** — Exponential backoff retry logic with GitHub rate limit detection and offline error guidance.
-- 🏎️ **Optimized npm** — High-performance `npm` strategy with offline caching and audit bypass for 30% faster installs.
+- 🏎️ **Optimized npm** — High-performance `npm` strategy with clean outputs and audit bypass for 30% faster installs.
 - 📊 **Auto Version Resolution** — Automatically fetches latest package versions with graceful fallback to stable defaults.
 - 📈 **Install Stats** — Detailed performance metrics and caching summaries after every installation.
+- 🎨 **UI RTL-Ready** — Specialized support for **Ant Design** RTL configuration and professional Arabic typography.
 
 ---
 
@@ -64,6 +67,7 @@ nexo create my-app
 | `nexo create --audit` | Enable security audit during installation |
 | `nexo create --strict` | Enable strict dependency resolution |
 | `nexo create --template` | Clone a project from a GitHub template |
+| `nexo create --rtl` | Create an Arabic & RTL project instantly |
 | `nexo wizard` | Guided project creation for beginners |
 | `nexo presets` | List and use optimized project presets |
 | `nexo check` | Run system & project health checks |
