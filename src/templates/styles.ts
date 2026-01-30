@@ -8,7 +8,7 @@ import { writeFile } from '../utils/index.js';
 /**
  * Generate App.css for non-Tailwind projects
  */
-const getAppCss = (): string => `
+const getAppCss = (isRtl: boolean): string => `
 :root {
   --bg-dark: #0a0a0a;
   --text-white: #ffffff;
@@ -23,8 +23,9 @@ body {
   margin: 0;
   background-color: var(--bg-dark);
   color: var(--text-white);
-  font-family: system-ui, -apple-system, sans-serif;
+  font-family: ${isRtl ? "'Cairo', " : ''}system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
+  ${isRtl ? 'text-align: right;' : ''}
 }
 
 .app-container {
@@ -214,6 +215,6 @@ export const createAppCss = async (ctx: ConfiguratorContext): Promise<void> => {
 
   if (styling !== 'tailwind') {
     const srcDir = path.join(ctx.projectPath, 'src');
-    await writeFile(path.join(srcDir, 'App.css'), getAppCss());
+    await writeFile(path.join(srcDir, 'App.css'), getAppCss(ctx.selections.rtl === true));
   }
 };

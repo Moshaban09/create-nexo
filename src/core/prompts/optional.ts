@@ -31,6 +31,12 @@ export const optionalFeaturesPrompt: PromptConfig = {
 
 
     {
+      value: 'rtl-starter',
+      name: 'Arabic & RTL Support',
+      comment: 'Native RTL with Cairo font',
+      hover_note: 'Native RTL support with Cairo font and Arabic lang configuration',
+    },
+    {
       value: 'ai-instructions',
       name: 'AI Instructions',
       comment: 'AI IDE/CLI guidance files',

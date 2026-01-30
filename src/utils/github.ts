@@ -1,5 +1,5 @@
 
-import { execa } from 'execa';
+import { downloadTemplate } from 'giget';
 import pc from 'picocolors';
 import {
     calculateBackoffDelay,
@@ -48,7 +48,8 @@ const isNetworkError = (error: unknown): boolean => {
     message.includes('econnrefused') ||
     message.includes('etimedout') ||
     message.includes('unable to connect') ||
-    message.includes('unable to access')
+    message.includes('unable to access') ||
+    message.includes('fetch failed')
   );
 };
 
@@ -94,7 +95,7 @@ const isRetryableError = (error: unknown): boolean => {
 // ============================================
 
 /**
- * Clones a GitHub repository using tiged with retry logic
+ * Clones a GitHub repository using giget with retry logic
  *
  * @param repo GitHub repository (e.g., 'user/repo')
  * @param targetDir Target directory
@@ -117,8 +118,11 @@ export const cloneTemplate = async (
     const s = spinner(attemptLabel);
 
     try {
-      // Use locally installed tiged
-      await execa('tiged', [repo, targetDir, '--force']);
+      // Use giget to download template
+      await downloadTemplate(repo, {
+        dir: targetDir,
+        force: true,
+      });
       s.succeed('Template cloned successfully');
       return;
     } catch (error) {

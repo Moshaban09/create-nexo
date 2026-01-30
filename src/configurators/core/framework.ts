@@ -52,12 +52,14 @@ export default defineConfig({
   await writeFile(path.join(ctx.projectPath, `vite.config.${configExt}`), viteConfig);
 
   // Create index.html
+  const isRtl = ctx.selections.rtl === true;
   const indexHtml = `<!DOCTYPE html>
-<html lang="en">
+<html lang="${isRtl ? 'ar' : 'en'}" dir="${isRtl ? 'rtl' : 'ltr'}">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    ${isRtl ? '<link rel="preconnect" href="https://fonts.googleapis.com" />\n    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />\n    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@200..1000&display=swap" rel="stylesheet" />' : ''}
     <title>${ctx.selections.projectName}</title>
   </head>
   <body>

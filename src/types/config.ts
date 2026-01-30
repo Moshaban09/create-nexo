@@ -29,6 +29,7 @@ export interface UserSelections {
   hasSWC?: boolean;
   installDependencies?: boolean;
   packageManager?: string;
+  rtl?: boolean;
 }
 
 export interface ConfiguratorContext {

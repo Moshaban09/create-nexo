@@ -56,6 +56,8 @@ export const projectTypes: Record<ProjectType, ProjectTypeConfig> = {
       dataFetching: 'tanstack-query',
       icons: 'lucide',
       structure: 'feature-based',
+      linting: 'eslint-prettier',
+      testing: 'vitest',
     },
     features: [
       'TypeScript for type safety',
@@ -80,6 +82,8 @@ export const projectTypes: Record<ProjectType, ProjectTypeConfig> = {
       dataFetching: 'tanstack-query',
       icons: 'lucide',
       structure: 'fsd',
+      linting: 'eslint-prettier',
+      testing: 'vitest',
     },
     features: [
       'TypeScript for type safety',
@@ -259,6 +263,17 @@ export const runWizard = async (): Promise<WizardResult | null> => {
     return null;
   }
 
+  // Step 5: RTL Support (Since we are Arabic-native)
+  const useRtl = await p.confirm({
+    message: 'Do you want to enable Arabic & RTL support? (Cairo font, rtl dir)',
+    initialValue: false,
+  });
+
+  if (p.isCancel(useRtl)) {
+    p.cancel('Wizard cancelled.');
+    return null;
+  }
+
   // Build selections
   const recommendations = selectedType.recommendations;
   const selections: UserSelections = {
@@ -274,7 +289,9 @@ export const runWizard = async (): Promise<WizardResult | null> => {
     dataFetching: recommendations.dataFetching || 'none',
     icons: recommendations.icons || 'none',
     structure: recommendations.structure || 'simple',
-
+    linting: recommendations.linting || 'none',
+    testing: recommendations.testing || 'none',
+    rtl: useRtl as boolean,
   };
 
   return {

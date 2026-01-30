@@ -21,7 +21,8 @@ export const createCommand: Command = {
     { flags: '--learn', description: 'Enable educational mode with explanations' },
     { flags: '--template <repo>', description: 'Clone a template from GitHub (e.g., user/repo)' },
     { flags: '--audit', description: 'Enable security audit during installation' },
-    { flags: '--strict', description: 'Enable strict dependency resolution (disable --legacy-peer-deps)' }
+    { flags: '--strict', description: 'Enable strict dependency resolution (disable --legacy-peer-deps)' },
+    { flags: '--rtl', description: 'Enable Arabic & RTL support with Cairo font' }
   ],
   action: async (name: string | undefined, options: CreateOptions) => {
     // Dynamically import the action logic only when executed

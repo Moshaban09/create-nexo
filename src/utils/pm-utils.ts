@@ -83,7 +83,7 @@ export const getInstallCommand = (pm: PackageManagerName, options: { audit?: boo
     case 'npm':
       const auditFlag = audit ? '' : '--no-audit';
       const strictFlag = strict ? '' : '--legacy-peer-deps';
-      return `npm install --prefer-offline ${auditFlag} --no-fund --progress=false ${strictFlag}`.replace(/\s+/g, ' ').trim();
+      return `npm install ${auditFlag} ${strictFlag}`.replace(/\s+/g, ' ').trim();
     case 'pnpm':
       return 'pnpm install';
     case 'bun':

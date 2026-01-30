@@ -157,8 +157,19 @@ const buildTechStack = (ctx: ConfiguratorContext): TechItem[] => {
 /**
  * Create App.tsx with Tailwind styling
  */
-const createTailwindApp = (projectName: string, techStack: TechItem[]): string => {
+const createTailwindApp = (projectName: string, techStack: TechItem[], isRtl: boolean): string => {
   const techStackString = techStack.map((t) => `{ name: '${t.name}', icon: '${t.icon}' }`).join(', ');
+
+  const t = {
+    badge: 'NEXO CLI',
+    ready: isRtl ? 'تطبيق React عالي الأداء جاهز للإطلاق.' : 'Your high-performance React application is ready for takeoff.',
+    techTitle: isRtl ? 'التقنيات المستخدمة' : 'Tech Stack',
+    startTitle: isRtl ? 'ابدأ الآن' : 'Get Started',
+    step1: isRtl ? 'قم بتديل src/App.tsx' : 'Edit src/App.tsx',
+    step2: isRtl ? 'احفظ الملف وشاهد التغييرات' : 'Save and see changes',
+    step3: isRtl ? 'ابدأ في بناء مشروعك المذهل! ✨' : 'Build something amazing! ✨',
+    footer: isRtl ? 'تم التطوير بكل ❤️ باستخدام' : 'Made with ❤️ using'
+  };
 
   return `const techStack = [${techStackString}]
 
@@ -176,7 +187,7 @@ function App() {
         {/* Header */}
         <div className="text-center mb-16 space-y-4 animate-in fade-in slide-in-from-bottom-4 duration-700">
           <div className="inline-block px-3 py-1 pb-1.5 mb-4 text-xs font-medium tracking-wider text-cyan-400 uppercase bg-cyan-950/30 border border-cyan-800/50 rounded-full">
-            NEXO CLI
+            ${t.badge}
           </div>
           <h1 className="text-6xl md:text-7xl font-bold tracking-tight">
             <span className="bg-gradient-to-br from-white via-white to-white/40 bg-clip-text text-transparent">
@@ -184,7 +195,7 @@ function App() {
             </span>
           </h1>
           <p className="text-lg text-neutral-400 max-w-lg mx-auto">
-            Your high-performance React application is ready for takeoff.
+            ${t.ready}
           </p>
         </div>
 
@@ -200,7 +211,7 @@ function App() {
                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
                    </svg>
                  </div>
-                 <h2 className="text-xl font-semibold text-white">Tech Stack</h2>
+                 <h2 className="text-xl font-semibold text-white">${t.techTitle}</h2>
                </div>
              <div className="flex flex-wrap gap-2">
                  {techStack.map((tech, i) => (
@@ -223,20 +234,20 @@ function App() {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                     </svg>
                   </div>
-                  <h2 className="text-xl font-semibold text-white">Get Started</h2>
+                  <h2 className="text-xl font-semibold text-white">${t.startTitle}</h2>
                 </div>
                 <div className="space-y-4">
                   {[
-                    { text: 'Edit src/App.tsx', code: true },
-                    { text: 'Save and see changes', code: false },
-                    { text: 'Build something amazing! ✨', code: false }
+                    { text: '${t.step1}', code: true },
+                    { text: '${t.step2}', code: false },
+                    { text: '${t.step3}', code: false }
                   ].map((step, i) => (
                     <div key={i} className="flex items-center gap-4 text-sm text-neutral-400">
                       <div className="flex items-center justify-center w-6 h-6 rounded-full border border-neutral-800 bg-neutral-900 text-xs font-mono">
                         {i + 1}
                       </div>
                       {step.code ? (
-                         <span>Edit <code className="px-1.5 py-0.5 rounded bg-cyan-950/30 border border-cyan-800/30 text-cyan-300 font-mono text-xs">src/App.tsx</code></span>
+                         <span>${isRtl ? 'قم بتعديل ' : 'Edit '} <code className="px-1.5 py-0.5 rounded bg-cyan-950/30 border border-cyan-800/30 text-cyan-300 font-mono text-xs">src/App.tsx</code></span>
                       ) : (
                          <span>{step.text}</span>
                       )}
@@ -249,7 +260,7 @@ function App() {
 
         {/* Footer */}
         <p className="text-neutral-500 text-sm animate-in fade-in duration-1000 delay-500">
-          Made with ❤️ using <span className="text-neutral-300 font-medium">NEXO CLI</span>
+          ${t.footer} <span className="text-neutral-300 font-medium">NEXO CLI</span>
         </p>
       </div>
     </div>
@@ -263,8 +274,18 @@ export default App
 /**
  * Create App.tsx with plain CSS styling
  */
-const createPlainApp = (projectName: string, techStack: TechItem[]): string => {
+const createPlainApp = (projectName: string, techStack: TechItem[], isRtl: boolean): string => {
   const techStackString = techStack.map((t) => `{ name: '${t.name}', icon: '${t.icon}' }`).join(', ');
+
+  const t = {
+    ready: isRtl ? 'تطبيق React عالي الأداء جاهز.' : 'Your high-performance React application is ready.',
+    techTitle: isRtl ? 'التقنيات المستخدمة' : 'Tech Stack',
+    startTitle: isRtl ? 'ابدأ الآن' : 'Get Started',
+    step1: isRtl ? 'قم بتعديل src/App.tsx' : 'Edit src/App.tsx',
+    step2: isRtl ? 'احفظ الملف وشاهد التغييرات' : 'Save and see changes',
+    step3: isRtl ? 'ابدأ في بناء مشروعك المذهل!' : 'Build something amazing!',
+    footer: isRtl ? 'تم التطوير بكل ❤️ باستخدام' : 'Made with ❤️ using'
+  };
 
   return `import './App.css'
 
@@ -279,14 +300,14 @@ function App() {
         <div className="header">
            <div className="badge">NEXO CLI</div>
            <h1 className="title">${projectName}</h1>
-           <p className="subtitle">Your high-performance React application is ready.</p>
+           <p className="subtitle">${t.ready}</p>
         </div>
 
         <div className="grid">
           <div className="card tech-card">
             <div className="card-header">
               <span className="icon">🛠️</span>
-              <h2>Tech Stack</h2>
+              <h2>${t.techTitle}</h2>
             </div>
             <div className="tech-tags">
               {techStack.map((tech, i) => <span key={i} className="tag">{tech.icon} {tech.name}</span>)}
@@ -296,26 +317,26 @@ function App() {
           <div className="card steps-card">
             <div className="card-header">
               <span className="icon">🚀</span>
-              <h2>Get Started</h2>
+              <h2>${t.startTitle}</h2>
             </div>
             <div className="steps">
               <div className="step">
                 <span className="number">1</span>
-                <span>Edit <code>src/App.tsx</code></span>
+                <span>${t.step1}</span>
               </div>
               <div className="step">
                 <span className="number">2</span>
-                <span>Save and see changes</span>
+                <span>${t.step2}</span>
               </div>
               <div className="step">
                 <span className="number">3</span>
-                <span>Build something amazing!</span>
+                <span>${t.step3}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <p className="footer">Made with ❤️ using NEXO CLI</p>
+        <p className="footer">${t.footer} NEXO CLI</p>
       </div>
     </div>
   )
@@ -329,11 +350,14 @@ export default App
  * Create welcome page App component
  */
 export const createWelcomePage = (ctx: ConfiguratorContext): string => {
-  const { projectName, styling } = ctx.selections;
+  const { projectName, styling, rtl } = ctx.selections;
   const techStack = buildTechStack(ctx);
   const isTailwind = styling === 'tailwind';
+  const isRtl = rtl === true;
 
-  return isTailwind ? createTailwindApp(projectName, techStack) : createPlainApp(projectName, techStack);
+  return isTailwind
+    ? createTailwindApp(projectName, techStack, isRtl)
+    : createPlainApp(projectName, techStack, isRtl);
 };
 
 /**

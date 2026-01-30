@@ -10,11 +10,11 @@ import { formatError } from '../../errors/index.js';
 import { type UserSelections } from '../../types/index.js';
 import { cache } from '../../utils/cache.js';
 import {
-    cloneTemplate,
-    generateFileTree,
-    getInstallCommand,
-    getPresetTemplate,
-    prefetchCommonPackages
+  cloneTemplate,
+  generateFileTree,
+  getInstallCommand,
+  getPresetTemplate,
+  prefetchCommonPackages
 } from '../../utils/index.js';
 import { log } from '../../utils/logger.js';
 import { type PackageManagerName } from '../../utils/pm-utils.js';
@@ -31,6 +31,7 @@ export interface CreateOptions {
   template?: string;
   audit?: boolean;
   strict?: boolean;
+  rtl?: boolean;
 }
 
 export async function createAction(name: string | undefined, options: CreateOptions) {
@@ -84,6 +85,11 @@ export async function createAction(name: string | undefined, options: CreateOpti
       log.info(`Using preset: ${pc.cyan(options.preset.toLowerCase())}`);
     } else {
       selections = await handleInteractiveFlow(projectName as string, options.dir);
+    }
+
+    // Inject CLI flags into selections
+    if (selections && options.rtl !== undefined) {
+      selections.rtl = options.rtl;
     }
 
     if (!selections) {
@@ -202,28 +208,31 @@ function reportNextSteps(selections: UserSelections, options: CreateOptions) {
   const devCmd = `${selectedPM} run dev`;
 
   log.newline();
-  log.dim('Next steps:');
-  log.dim(`  cd ${selections.projectName}`);
+  log.print(pc.bold(pc.cyan('  🚀 Next Steps:')));
+  log.newline();
+  log.print(`  ${pc.dim('1.')} cd ${pc.cyan(selections.projectName)}`);
+  log.newline();
 
   if (!selections.installDependencies) {
-    if (selectedPM === 'npm') {
+    if (selectedPM === 'npm' && !isAudited && !isStrict) {
+      log.print(`    ${pc.yellow('⚡')} ${pc.bold(pc.italic(pc.red('Optimized & fast installation ready')))} ${pc.dim('(Bypass security checks for 2x faster setup)')}`);
+    }
+    log.print(`  ${pc.dim('2.')} ${pc.white(installCmd)}`);
+
+    if (selectedPM === 'npm' && !isAudited && !isStrict) {
       log.newline();
-      log.success(isAudited ? '  🛡️  Install with security audit enabled:' : '  ⚡ Install with speed optimizations:');
+      log.print(`    ${pc.blue('🛡️')} ${pc.dim('Standard install (Secure & verified)')}`);
+      log.print(`    ${pc.white('npm install')}`);
     }
 
-    log.dim(`  ${installCmd}`);
-  }
-
-  log.newline();
-  log.dim(`  ${devCmd}`);
-  log.newline();
-
-  if (selectedPM === 'npm') {
-    if (!isAudited) log.print(`  ${pc.yellow('(Security: Run "nexo check" after install for a full audit)')}`);
-    if (!isStrict) log.print(`  ${pc.magenta('(Stability: Using --legacy-peer-deps for React 19 compatibility)')}`);
     log.newline();
+    log.print(`  ${pc.dim('3.')} ${pc.white(devCmd)}`);
+  } else {
+    log.newline();
+    log.print(`  ${pc.dim('2.')} ${pc.white(devCmd)}`);
   }
 
-  log.cyan('Happy coding! 🚀');
+  log.newline();
+  log.print(`  ${pc.magenta(pc.bold('Happy coding!'))} ${pc.dim('—')} ${pc.cyan('NEXO CLI')}`);
   log.newline();
 }

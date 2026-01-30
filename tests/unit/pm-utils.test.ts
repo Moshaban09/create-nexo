@@ -49,15 +49,15 @@ describe('pm-utils', () => {
 
   describe('getInstallCommand', () => {
     it('should return optimized npm command for npm', () => {
-      expect(getInstallCommand('npm')).toBe('npm install --prefer-offline --no-audit --no-fund --progress=false --legacy-peer-deps');
+      expect(getInstallCommand('npm')).toBe('npm install --no-audit --legacy-peer-deps');
     });
 
     it('should respect audit option', () => {
-      expect(getInstallCommand('npm', { audit: true })).toBe('npm install --prefer-offline --no-fund --progress=false --legacy-peer-deps');
+      expect(getInstallCommand('npm', { audit: true })).toBe('npm install --legacy-peer-deps');
     });
 
     it('should respect strict option', () => {
-      expect(getInstallCommand('npm', { strict: true })).toBe('npm install --prefer-offline --no-audit --no-fund --progress=false');
+      expect(getInstallCommand('npm', { strict: true })).toBe('npm install --no-audit');
     });
 
     it('should return pnpm install for pnpm', () => {

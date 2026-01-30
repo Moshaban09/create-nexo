@@ -1,10 +1,10 @@
 
-import { execa } from 'execa';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { downloadTemplate } from 'giget';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { NetworkError, OfflineError, RateLimitError } from '../../src/errors/network-errors.js';
 import { cloneTemplate, getPresetTemplate } from '../../src/utils/github.js';
 
-vi.mock('execa');
+vi.mock('giget');
 vi.mock('../../src/utils/spinner.js', () => ({
   spinner: vi.fn(() => ({
     succeed: vi.fn(),
@@ -37,14 +37,17 @@ describe('github-utils', () => {
       vi.clearAllMocks();
     });
 
-    it('should call execa with tiged', async () => {
+    it('should call downloadTemplate from giget', async () => {
       await cloneTemplate('user/repo', './target');
 
-      expect(execa).toHaveBeenCalledWith('tiged', ['user/repo', './target', '--force']);
+      expect(downloadTemplate).toHaveBeenCalledWith('user/repo', {
+        dir: './target',
+        force: true,
+      });
     });
 
-    it('should throw error if execa fails', async () => {
-      vi.mocked(execa).mockRejectedValueOnce(new Error('Clone failed'));
+    it('should throw error if downloadTemplate fails', async () => {
+      vi.mocked(downloadTemplate).mockRejectedValueOnce(new Error('Clone failed'));
 
       await expect(cloneTemplate('user/repo', './target')).rejects.toThrow('Clone failed');
     });
@@ -62,7 +65,7 @@ describe('github-utils', () => {
 
     it('should retry on network errors with exponential backoff', async () => {
       // Fail twice, then succeed
-      vi.mocked(execa)
+      vi.mocked(downloadTemplate)
         .mockRejectedValueOnce(new Error('ENOTFOUND'))
         .mockRejectedValueOnce(new Error('ETIMEDOUT'))
         .mockResolvedValueOnce({} as any);
@@ -79,11 +82,11 @@ describe('github-utils', () => {
       await vi.advanceTimersByTimeAsync(200); // Second retry delay
 
       await expect(promise).resolves.not.toThrow();
-      expect(execa).toHaveBeenCalledTimes(3);
+      expect(downloadTemplate).toHaveBeenCalledTimes(3);
     });
 
     it('should throw RateLimitError on 403 response', async () => {
-      vi.mocked(execa).mockRejectedValue(new Error('403 rate limit exceeded'));
+      vi.mocked(downloadTemplate).mockRejectedValue(new Error('403 rate limit exceeded'));
 
       const promise = cloneTemplate('user/repo', './target', {
         maxRetries: 0,
@@ -96,7 +99,7 @@ describe('github-utils', () => {
     });
 
     it('should throw OfflineError on ENOTFOUND after max retries', async () => {
-      vi.mocked(execa).mockRejectedValue(new Error('ENOTFOUND'));
+      vi.mocked(downloadTemplate).mockRejectedValue(new Error('ENOTFOUND'));
 
       const promise = cloneTemplate('user/repo', './target', {
         maxRetries: 0,
@@ -109,7 +112,7 @@ describe('github-utils', () => {
     });
 
     it('should throw NetworkError on non-network failure after max retries', async () => {
-      vi.mocked(execa).mockRejectedValue(new Error('Unknown error'));
+      vi.mocked(downloadTemplate).mockRejectedValue(new Error('Unknown error'));
 
       const promise = cloneTemplate('user/repo', './target', {
         maxRetries: 0,
@@ -122,7 +125,7 @@ describe('github-utils', () => {
     });
 
     it('should NOT retry on 404 (repo not found)', async () => {
-      vi.mocked(execa).mockRejectedValue(new Error('404 not found'));
+      vi.mocked(downloadTemplate).mockRejectedValue(new Error('404 not found'));
 
       const promise = cloneTemplate('user/repo', './target', {
         maxRetries: 3,
@@ -133,11 +136,11 @@ describe('github-utils', () => {
 
       await expect(promise).rejects.toThrow();
       // Should only be called once - no retries for 404
-      expect(execa).toHaveBeenCalledTimes(1);
+      expect(downloadTemplate).toHaveBeenCalledTimes(1);
     });
 
     it('should respect max retries limit', async () => {
-      vi.mocked(execa).mockRejectedValue(new Error('ECONNREFUSED'));
+      vi.mocked(downloadTemplate).mockRejectedValue(new Error('ECONNREFUSED'));
 
       let caughtError: Error | null = null;
       const promise = cloneTemplate('user/repo', './target', {
@@ -156,7 +159,7 @@ describe('github-utils', () => {
       // Verify error was thrown and retries occurred
       expect(caughtError).not.toBeNull();
       // Initial attempt + 2 retries = 3 calls
-      expect(execa).toHaveBeenCalledTimes(3);
+      expect(downloadTemplate).toHaveBeenCalledTimes(3);
     });
   });
 });

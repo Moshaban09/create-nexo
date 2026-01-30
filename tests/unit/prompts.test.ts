@@ -191,8 +191,8 @@ describe('Prompts Module', () => {
       expect(optionalFeaturesPrompt.type).toBe('checkbox');
     });
 
-    it('should have 4 optional features', () => {
-      expect(optionalFeaturesPrompt.options).toHaveLength(4);
+    it('should have 5 optional features', () => {
+      expect(optionalFeaturesPrompt.options).toHaveLength(5);
     });
 
     it('should include testing option', () => {

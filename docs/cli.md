@@ -20,6 +20,7 @@ nexo create my-app --preset=saas
 | `--dry-run` | Preview without creating files |
 | `--cicd` | Include GitHub Actions workflow |
 | `--preset=<name>` | Use a preset configuration |
+| `--rtl` | **[New]** Enable Arabic & RTL support (Cairo font, rtl dir) |
 
 ---
 
@@ -74,19 +75,19 @@ nexo generate feature auth
 
 ---
 
-### `nexo doctor`
+### `nexo check`
 
-Check your environment for compatibility.
+Run system & project health checks.
 
 ```bash
-nexo doctor
+nexo check
+nexo check --system
+nexo check --project
 ```
 
-Checks:
-- Node.js version (24+)
-- npm version
-- Git installation
-- Package manager availability
+**Checks:**
+- **System**: Node.js version, npm/pnpm/yarn availability, Git installation.
+- **Project**: Dependency audits, structural integrity, and best practice alignment.
 
 ---
 
@@ -134,6 +135,12 @@ nexo create my-app --parallel
 
 ```bash
 nexo create my-app --dry-run
+```
+
+### Create an Arabic & RTL project
+
+```bash
+nexo create my-arabic-app --rtl
 ```
 
 ### Generate feature with tests

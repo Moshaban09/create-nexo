@@ -1,5 +1,6 @@
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
+import { BANNER } from '../core/banner.js';
 import { Command } from '../core/command.js';
 import { setup } from '../core/setup.js';
 import { runWizard } from '../core/wizard.js';
@@ -17,25 +18,8 @@ export const wizardCommand: Command = {
   action: async (options: { dir: string; audit?: boolean; strict?: boolean }) => {
     // Start background prefetch
     prefetchCommonPackages();
-    // We might need to handle the banner display globally or inside here
-    const banner = `
-${pc.cyan('╔═══════════════════════════════════════════════════════════════╗')}
-${pc.cyan('║')}                                                               ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.bold('███╗   ██╗███████╗██╗  ██╗ ██████╗ ')}                        ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.bold('████╗  ██║██╔════╝╚██╗██╔╝██╔═══██╗')}                        ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.bold('██╔██╗ ██║█████╗   ╚███╔╝ ██║   ██║')}                        ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.bold('██║╚██╗██║██╔══╝   ██╔██╗ ██║   ██║')}                        ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.bold('██║ ╚████║███████╗██╔╝ ██╗╚██████╔╝')}                        ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.bold('╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝ ╚═════╝ ')}                        ${pc.cyan('║')}
-${pc.cyan('║')}                                                               ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.dim('N - Next-generation')}                                           ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.dim('E - Extensible')}                                                ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.dim('X - X-framework')}                                               ${pc.cyan('║')}
-${pc.cyan('║')}   ${pc.dim('O - Orchestrator')}                                              ${pc.cyan('║')}
-${pc.cyan('║')}                                                               ${pc.cyan('║')}
-${pc.cyan('╚═══════════════════════════════════════════════════════════════╝')}
-`;
-    log.print(banner);
+
+    log.print(BANNER);
 
     const result = await runWizard();
 
@@ -82,36 +66,40 @@ ${pc.cyan('╚══════════════════════
     const isAudited = options.audit === true;
     const isStrict = options.strict === true;
     const installCmd = getInstallCommand(selectedPM as PackageManagerName, { audit: isAudited, strict: isStrict });
+    const devCmd = `${selectedPM} run dev`;
 
     log.newline();
-    log.dim('Next steps:');
-    log.dim(`  cd ${result.projectName}`);
-    if (selectedPM === 'npm') {
-      log.newline();
-      if (isAudited) {
-        log.success('  🛡️  Install with security audit enabled:');
-      } else {
-        log.success('  ⚡ Install with speed optimizations:');
-      }
-    }
-    log.dim(`  ${installCmd}`);
+    log.print(pc.bold(pc.cyan('  🚀 Next Steps:')));
     log.newline();
-    log.dim(`  ${selectedPM} run dev`);
+    log.print(`  ${pc.dim('1.')} cd ${pc.cyan(result.projectName)}`);
+    log.newline();
+
+    if (!result.selections.installDependencies) {
+      if (selectedPM === 'npm' && !isAudited && !isStrict) {
+        log.print(`    ${pc.yellow('⚡')} ${pc.bold(pc.italic(pc.red('Optimized & fast installation ready')))} ${pc.dim('(Bypass security checks for 2x faster setup)')}`);
+      }
+      log.print(`  ${pc.dim('2.')} ${pc.white(installCmd)}`);
+
+      if (selectedPM === 'npm' && !isAudited && !isStrict) {
+        log.newline();
+        log.print(`    ${pc.blue('🛡️')} ${pc.dim('Standard install (Secure & verified)')}`);
+        log.print(`    ${pc.white('npm install')}`);
+      }
+
+      log.newline();
+      log.print(`  ${pc.dim('3.')} ${pc.white(devCmd)}`);
+    } else {
+      log.newline();
+      log.print(`  ${pc.dim('2.')} ${pc.white(devCmd)}`);
+    }
+
     if (selectedPM === 'npm' && availableManagers.includes('pnpm')) {
       log.newline();
-      log.warn('⚡ Pro tip: Using pnpm can be 3x faster for this project.');
+      log.warn('  ⚡ Pro tip: Using pnpm can be 3x faster for this project.');
     }
 
     log.newline();
-    if (selectedPM === 'npm') {
-      if (!isAudited) {
-        log.print(`  ${pc.yellow('(Security: Run "nexo check" after install for a full audit)')}`);
-      }
-      if (!isStrict) {
-        log.print(`  ${pc.magenta('(Stability: Using --legacy-peer-deps for React 19 compatibility)')}`);
-      }
-    }
-    log.cyan('Happy coding! 🚀');
+    log.print(`  ${pc.magenta(pc.bold('Happy coding!'))} ${pc.dim('—')} ${pc.cyan('NEXO CLI')}`);
     log.newline();
   }
 };
