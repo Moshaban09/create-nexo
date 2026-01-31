@@ -1,7 +1,6 @@
 import * as p from '@clack/prompts';
 import path from 'node:path';
 import pc from 'picocolors';
-import { DEFAULT_PROJECT_NAME } from '../../constants/index.js';
 import { BANNER } from '../../core/banner.js';
 import { PRESETS } from '../../core/presets.js';
 import { setup } from '../../core/setup.js';
@@ -54,24 +53,28 @@ export async function createAction(name: string | undefined, options: CreateOpti
   await cache.load();
 
   try {
-    // 1. Resolve Project Name
-    const projectName = name || await p.text({
-      message: 'Project name:',
-      placeholder: DEFAULT_PROJECT_NAME,
-      defaultValue: DEFAULT_PROJECT_NAME,
-      validate: (value) => {
-        const v = value || DEFAULT_PROJECT_NAME;
-        if (!/^[a-z0-9-_]+$/i.test(v)) {
-          return 'Project name can only contain letters, numbers, hyphens, and underscores';
-        }
-        return undefined;
-      },
-    });
+    // 1. Resolve Project Path/Name
+    let projectPathInput = name;
 
-    if (p.isCancel(projectName)) {
+    if (!projectPathInput) {
+      projectPathInput = await p.text({
+        message: 'Where should the project be created? (name, path, or . for current):',
+        placeholder: 'my-app',
+        defaultValue: '.',
+        validate: (_value) => {
+          return undefined;
+        },
+      }) as string;
+    }
+
+    if (p.isCancel(projectPathInput)) {
       p.cancel('Operation cancelled.');
       process.exit(0);
     }
+
+    const resolvedPath = path.resolve(options.dir, projectPathInput);
+    const projectName = path.basename(resolvedPath);
+    options.dir = path.dirname(resolvedPath);
 
     let selections: UserSelections | null;
 

@@ -79,6 +79,9 @@ my-app/
 # Recommended (Instant execution)
 npx create-nexo@latest
 
+# Create with a specific preset (Fastest)
+npx create-nexo@latest my-app -p dashboard
+
 # Or using the npm create shorthand
 npm create nexo@latest
 

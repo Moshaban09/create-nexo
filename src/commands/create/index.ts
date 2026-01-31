@@ -16,7 +16,7 @@ export const createCommand: Command = {
   options: [
     { flags: '-d, --dir <directory>', description: 'Target directory', defaultValue: '.' },
     { flags: '--dry-run', description: 'Preview changes without creating files' },
-    { flags: '--preset <preset>', description: 'Use a preset configuration (saas, dashboard, landing)' },
+    { flags: '-p, --preset <preset>', description: 'Use a preset configuration (saas, dashboard, landing, ecommerce, etc.)' },
     { flags: '--parallel', description: 'Use parallel execution for faster setup' },
     { flags: '--learn', description: 'Enable educational mode with explanations' },
     { flags: '--template <repo>', description: 'Clone a template from GitHub (e.g., user/repo)' },

@@ -165,7 +165,7 @@ const createTailwindApp = (projectName: string, techStack: TechItem[], isRtl: bo
     ready: isRtl ? 'تطبيق React عالي الأداء جاهز للإطلاق.' : 'Your high-performance React application is ready for takeoff.',
     techTitle: isRtl ? 'التقنيات المستخدمة' : 'Tech Stack',
     startTitle: isRtl ? 'ابدأ الآن' : 'Get Started',
-    step1: isRtl ? 'قم بتديل src/App.tsx' : 'Edit src/App.tsx',
+    step1: isRtl ? 'قم بتعديل src/App.tsx' : 'Edit src/App.tsx',
     step2: isRtl ? 'احفظ الملف وشاهد التغييرات' : 'Save and see changes',
     step3: isRtl ? 'ابدأ في بناء مشروعك المذهل! ✨' : 'Build something amazing! ✨',
     footer: isRtl ? 'تم التطوير بكل ❤️ باستخدام' : 'Made with ❤️ using'

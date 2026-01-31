@@ -15,20 +15,20 @@ vi.mock('../../src/utils/spinner.js', () => ({
 
 describe('github-utils', () => {
   describe('getPresetTemplate', () => {
-    it('should return undefined for currently disabled saas preset', () => {
-      expect(getPresetTemplate('saas')).toBeUndefined();
+    it('should return correct template for saas preset', () => {
+      expect(getPresetTemplate('saas')).toBe('gh:Moshaban09/nexo-templates/react/saas');
     });
 
-    it('should return undefined for currently disabled dashboard preset', () => {
-      expect(getPresetTemplate('dashboard')).toBeUndefined();
+    it('should return correct template for dashboard preset', () => {
+      expect(getPresetTemplate('dashboard')).toBe('gh:Moshaban09/nexo-templates/react/dashboard');
     });
 
     it('should return undefined for unknown preset', () => {
       expect(getPresetTemplate('unknown')).toBeUndefined();
     });
 
-    it('should stay undefined regardless of case', () => {
-      expect(getPresetTemplate('SAAS')).toBeUndefined();
+    it('should be case insensitive', () => {
+      expect(getPresetTemplate('SAAS')).toBe('gh:Moshaban09/nexo-templates/react/saas');
     });
   });
 

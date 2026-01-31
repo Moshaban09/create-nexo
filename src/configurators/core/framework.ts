@@ -41,11 +41,20 @@ const setupReactVite = async (ctx: ConfiguratorContext, isTypeScript: boolean, c
     ? "import react from '@vitejs/plugin-react-swc'"
     : "import react from '@vitejs/plugin-react'";
 
-  const viteConfig = `${vitePluginImport}
-import { defineConfig } from 'vite'
+  const shouldUseAlias = ctx.selections.importAlias;
+  const pathImports = shouldUseAlias ? "import path from 'path';\nimport { fileURLToPath } from 'url';\n" : '';
+  const dirNameDef = shouldUseAlias ? "\nconst __filename = fileURLToPath(import.meta.url);\nconst __dirname = path.dirname(__filename);" : '';
+
+  const viteConfig = `${pathImports}${vitePluginImport}
+import { defineConfig } from 'vite'${dirNameDef}
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [react()],${shouldUseAlias ? `
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "./src"),
+    },
+  },` : ''}
 })
 `;
 

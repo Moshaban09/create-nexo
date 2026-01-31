@@ -95,7 +95,7 @@ This project uses Tailwind CSS v4.
     content += `## 📂 Project Structure (Feature-Sliced Design)
 - \`app\`: Global app setup (providers, styles).
 - \`pages\`: Route components.
-- \`widgets\`: Composition of entities/feautres.
+- \`widgets\`: Composition of entities/features.
 - \`features\`: User interactions (e.g. Auth, Search).
 - \`entities\`: Business entities (e.g. User, Product).
 - \`shared\`: Reusable UI, libs, api.

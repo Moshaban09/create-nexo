@@ -26,8 +26,8 @@ const FALLBACK_VERSIONS: Record<string, string> = {
   'jotai': '^2.11.0',
 
   // Routing
-  'react-router-dom': '^7.1.0',
-  '@tanstack/react-router': '^1.95.0',
+  'react-router-dom': '^7.13.0',
+  '@tanstack/react-router': '^1.157.0',
 
   // Data fetching
   '@tanstack/react-query': '^5.64.0',
@@ -39,7 +39,7 @@ const FALLBACK_VERSIONS: Record<string, string> = {
 
   // UI
   'tailwindcss': '^4.0.0',
-  'lucide-react': '^0.469.0',
+  'lucide-react': '^0.553.0',
 };
 
 // ============================================

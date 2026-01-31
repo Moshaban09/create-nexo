@@ -70,7 +70,7 @@ export const createMainFile = async (
   let renderApp = '<App />';
 
   if (routing === 'react-router') {
-    imports.push("import { createBrowserRouter, RouterProvider } from 'react-router'");
+    imports.push("import { createBrowserRouter, RouterProvider } from 'react-router-dom'");
     routerSetup = `
 const router = createBrowserRouter([
   {

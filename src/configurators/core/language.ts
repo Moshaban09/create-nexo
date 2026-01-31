@@ -33,10 +33,12 @@ export const languageConfigurator = async (ctx: ConfiguratorContext): Promise<vo
           noUnusedLocals: true,
           noUnusedParameters: true,
           noFallthroughCasesInSwitch: true,
-          baseUrl: '.',
-          paths: {
-            '@/*': ['./src/*'],
-          },
+          ...(ctx.selections.importAlias ? {
+            baseUrl: '.',
+            paths: {
+              '@/*': ['./src/*'],
+            },
+          } : {})
         },
         include: ['src'],
         references: [{ path: './tsconfig.node.json' }],

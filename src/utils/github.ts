@@ -2,25 +2,27 @@
 import { downloadTemplate } from 'giget';
 import pc from 'picocolors';
 import {
-    calculateBackoffDelay,
-    DEFAULT_RETRY_CONFIG,
-    NetworkError,
-    OfflineError,
-    RateLimitError,
-    RetryConfig,
-    sleep,
+  calculateBackoffDelay,
+  DEFAULT_RETRY_CONFIG,
+  NetworkError,
+  OfflineError,
+  RateLimitError,
+  RetryConfig,
+  sleep,
 } from '../errors/index.js';
 import { spinner } from './spinner.js';
 
 /**
- * Maps presets to GitHub repositories
- * COMMENTED OUT: These template repositories haven't been created yet
- * Users can still use --template flag with their own repos
+ * Maps presets to GitHub repositories in the official monorepo
  */
 export const PRESET_TEMPLATES: Record<string, string> = {
-  // saas: 'Moshaban09/nexo-saas-template',
-  // dashboard: 'Moshaban09/nexo-dashboard-template',
-  // landing: 'Moshaban09/nexo-landing-template',
+  saas: 'gh:Moshaban09/nexo-templates/react/saas',
+  landing: 'gh:Moshaban09/nexo-templates/react/landing',
+  dashboard: 'gh:Moshaban09/nexo-templates/react/dashboard',
+  portfolio: 'gh:Moshaban09/nexo-templates/react/portfolio',
+  ecommerce: 'gh:Moshaban09/nexo-templates/react/ecommerce',
+  'blog-docs': 'gh:Moshaban09/nexo-templates/react/blog-docs',
+  'components-ui': 'gh:Moshaban09/nexo-templates/react/components-ui',
 };
 
 // ============================================

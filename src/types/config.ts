@@ -30,6 +30,7 @@ export interface UserSelections {
   installDependencies?: boolean;
   packageManager?: string;
   rtl?: boolean;
+  importAlias?: boolean;
 }
 
 export interface ConfiguratorContext {

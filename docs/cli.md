@@ -19,7 +19,7 @@ nexo create my-app --preset=saas
 | `--parallel` | Enable parallel execution (faster) |
 | `--dry-run` | Preview without creating files |
 | `--cicd` | Include GitHub Actions workflow |
-| `--preset=<name>` | Use a preset configuration |
+| `-p, --preset=<name>` | Use a preset configuration |
 | `--rtl` | **[New]** Enable Arabic & RTL support (Cairo font, rtl dir) |
 
 ---
@@ -103,7 +103,10 @@ nexo presets
 - `saas` - SaaS starter with auth, i18n, dashboard
 - `landing` - Landing page with animations
 - `dashboard` - Admin dashboard template
-- `minimal` - Minimal setup
+- `portfolio` - Personal portfolio template
+- `ecommerce` - E-commerce store template
+- `blog-docs` - Blog and documentation template
+- `components-ui` - UI component library template
 - `[Custom]` - Your saved presets from `nexo create`
 
 ---

@@ -1,6 +1,6 @@
 import { UserSelections } from '../types/index.js';
 
-export type PresetName = 'minimal' | 'saas' | 'dashboard' | 'landing';
+export type PresetName = 'minimal' | 'saas' | 'dashboard' | 'landing' | 'portfolio' | 'ecommerce' | 'blog-docs' | 'components-ui';
 
 
 export const PRESETS: Record<PresetName, Partial<UserSelections>> = {
@@ -64,6 +64,60 @@ export const PRESETS: Record<PresetName, Partial<UserSelections>> = {
     optionalFeatures: ['animation', 'aiInstructions'],
     animation: 'framer-motion',
     aiInstructions: ['universal'],
+  },
+  portfolio: {
+    framework: 'react',
+    variant: 'ts',
+    language: 'typescript',
+    styling: 'tailwind',
+    ui: 'none',
+    forms: 'rhf-zod',
+    state: 'none',
+    routing: 'none',
+    dataFetching: 'none',
+    icons: 'lucide',
+    structure: 'feature-based',
+    optionalFeatures: ['animation'],
+    animation: 'framer-motion',
+  },
+  ecommerce: {
+    framework: 'react',
+    variant: 'ts',
+    language: 'typescript',
+    styling: 'tailwind',
+    ui: 'shadcn',
+    forms: 'rhf-zod',
+    state: 'zustand',
+    routing: 'react-router',
+    dataFetching: 'tanstack-query',
+    icons: 'lucide',
+    structure: 'feature-based',
+  },
+  'blog-docs': {
+    framework: 'react',
+    variant: 'ts',
+    language: 'typescript',
+    styling: 'tailwind',
+    ui: 'none',
+    forms: 'none',
+    state: 'none',
+    routing: 'react-router',
+    dataFetching: 'none',
+    icons: 'lucide',
+    structure: 'feature-based',
+  },
+  'components-ui': {
+    framework: 'react',
+    variant: 'ts',
+    language: 'typescript',
+    styling: 'tailwind',
+    ui: 'shadcn', // Using shadcn as base for component library
+    forms: 'rhf-zod',
+    state: 'none',
+    routing: 'react-router',
+    dataFetching: 'none',
+    icons: 'lucide',
+    structure: 'feature-based',
   },
 
 };

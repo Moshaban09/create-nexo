@@ -4,16 +4,16 @@ import path from 'node:path';
 import pc from 'picocolors';
 import { estimateBundleSize, formatSize } from '../../core/insights/bundle-size.js';
 import {
-  corePrompts,
-  optionalFeaturesPrompt,
-  optionalSubPrompts
+    corePrompts,
+    optionalFeaturesPrompt,
+    optionalSubPrompts
 } from '../../core/prompts.js';
 import { config } from '../../core/user-config.js';
 import { type PromptOption, type UserSelections } from '../../types/index.js';
 import {
-  detectAvailableManagers,
-  detectProjectConfig,
-  isDirEmpty
+    detectAvailableManagers,
+    detectProjectConfig,
+    isDirEmpty
 } from '../../utils/index.js';
 import { type PackageManagerName } from '../../utils/pm-utils.js';
 import { prefetchPackages } from '../../utils/prefetch.js';
@@ -237,6 +237,14 @@ export async function handleInteractiveFlow(
       }
     }
 
+    // Import Alias
+    const useAlias = await p.confirm({
+      message: 'Do you want to configure import alias (@/*)?',
+      initialValue: true,
+    });
+
+    if (p.isCancel(useAlias)) return null;
+
     // Optional features
     const optionalFeatures = await p.multiselect({
       message: 'Select optional features (Space to select):',
@@ -293,6 +301,7 @@ export async function handleInteractiveFlow(
       `Forms:          ${pc.cyan(answers.forms as string)}`,
       `State:          ${pc.cyan(answers.state as string)}`,
       `Routing:        ${pc.cyan(answers.routing as string)}`,
+      `Import Alias:   ${pc.cyan(useAlias ? '@/*' : 'None')}`,
       `Bundle Est.:    ${pc.green(formatSize(sizeKb))} ${pc.dim('(Initial JS)')}`,
     ];
 
@@ -346,7 +355,8 @@ export async function handleInteractiveFlow(
       hasSWC: variant.includes('swc'),
       packageManager: answers.packageManager as string || 'npm',
       installDependencies: installDeps,
-      rtl: (answers.optionalFeatures as string[]).includes('rtl-starter')
+      rtl: (answers.optionalFeatures as string[]).includes('rtl-starter'),
+      importAlias: useAlias,
     } as UserSelections;
 
     // Ask to save preset

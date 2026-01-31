@@ -5,7 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.7.1] - 2026-01-30
+## [1.7.2] - 2026-01-31
+
+### 🚀 React Template Ecosystem & CLI Polish
+- **Templates**: **Complete React Suite** — Launched 7 premium React templates powered by Vite & Tailwind v4:
+  - **SaaS**: Full-stack starter with Auth & Dashboard.
+  - **Landing**: High-conversion marketing pages.
+  - **Dashboard**: Data-rich admin panel with charts.
+  - **Portfolio**: Personal branding showcase.
+  - **Ecommerce**: Modern storefront with cart logic.
+  - **Blog/Docs**: Content-first template for documentation.
+  - **Components UI**: Extensive shadcn/ui component library.
+- **CLI**: **Remote Architecture** — CLI now fetches fresh templates directly from `nexo-templates/react`, ensuring you always get the latest version without needing to update the CLI.
+- **UX**: **Enhanced Commands** — Added `-p` shortcut for presets (e.g., `npx create-nexo -p dashboard`) for faster workflows.
 
 ### 🐛 Fixes & Quality
 - **Fix**: **Routing Dependency** — Fixed `routingConfigurator` to correctly install `react-router-dom` instead of `react-router` for web projects.
