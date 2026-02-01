@@ -27,9 +27,12 @@ export const optionalFeaturesPrompt: PromptConfig = {
       comment: 'Motion & transitions',
       hover_note: 'Framer Motion, GSAP, or React Spring for smooth animations',
     },
-
-
-
+    {
+      value: 'backend',
+      name: 'Backend Integration',
+      comment: 'BaaS SDK setup',
+      hover_note: 'Supabase, Firebase, Clerk, or Prisma client configuration',
+    },
     {
       value: 'rtl-starter',
       name: 'Arabic & RTL Support',
@@ -108,12 +111,6 @@ export const animationPrompt: PromptConfig = {
       comment: 'Professional-grade',
       hover_note: 'Industry-standard animation library with timeline control and ScrollTrigger',
     },
-    {
-      value: 'react-spring',
-      name: 'React Spring',
-      comment: 'Physics-based',
-      hover_note: 'Spring-physics animations for natural motion feel',
-    },
   ],
 };
 
@@ -185,11 +182,43 @@ export const aiInstructionsPrompt: PromptConfig = {
 
 
 
+export const backendPrompt: PromptConfig = {
+  name: 'backend',
+  message: 'Select a backend integration:',
+  type: 'list',
+  options: [
+    {
+      value: 'supabase',
+      name: 'Supabase',
+      comment: 'Open-source Firebase alternative',
+      hover_note: 'PostgreSQL database, Auth, Storage, and Realtime subscriptions',
+    },
+    {
+      value: 'firebase',
+      name: 'Firebase',
+      comment: 'Google BaaS platform',
+      hover_note: 'Authentication, Firestore, Cloud Functions, and Hosting',
+    },
+    {
+      value: 'clerk',
+      name: 'Clerk',
+      comment: 'Modern authentication',
+      hover_note: 'Drop-in authentication with user management and session handling',
+    },
+    {
+      value: 'prisma',
+      name: 'Prisma',
+      comment: 'Next-gen ORM',
+      hover_note: 'Type-safe database client for PostgreSQL, MySQL, SQLite, and more',
+    },
+  ],
+};
+
 /** Sub-prompts for optional features */
 export const optionalSubPrompts: Record<string, PromptConfig> = {
-
   'ai-instructions': aiInstructionsPrompt,
   testing: testingPrompt,
   linting: lintingPrompt,
   animation: animationPrompt,
+  backend: backendPrompt,
 };

@@ -291,6 +291,7 @@ export const runWizard = async (): Promise<WizardResult | null> => {
     structure: recommendations.structure || 'simple',
     linting: recommendations.linting || 'none',
     testing: recommendations.testing || 'none',
+    backend: recommendations.backend || 'none',
     rtl: useRtl as boolean,
   };
 

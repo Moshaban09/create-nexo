@@ -11,15 +11,6 @@ const FORMS_CONFIGS = {
     'yup': '^1.6.0',
     '@hookform/resolvers': '^3.9.0',
   },
-  'formik-zod': {
-    'formik': '^2.4.6',
-    'zod': '^3.25.0',
-    'zod-formik-adapter': '^1.3.0',
-  },
-  'formik-yup': {
-    'formik': '^2.4.6',
-    'yup': '^1.6.0',
-  },
   'tanstack-form': {
     '@tanstack/react-form': '^1.31.0',
     'zod': '^3.25.0',

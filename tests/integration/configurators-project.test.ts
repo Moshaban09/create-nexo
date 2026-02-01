@@ -45,40 +45,9 @@ describe('Project Configurators', () => {
       expect(await pathExists(path.join(testDir, 'src/shared'))).toBe(true);
     });
 
-    it('should create FSD structure', async () => {
-      const ctx: ConfiguratorContext = {
-        projectPath: testDir,
-        selections: {
-          projectName: 'test-project', framework: 'react', variant: 'ts', language: 'typescript',
-          styling: 'tailwind', ui: 'none', forms: 'none', state: 'none',
-          routing: 'none', dataFetching: 'none', icons: 'none',
-          structure: 'fsd',
-        },
-      };
 
-      await structureConfigurator(ctx);
 
-      expect(await pathExists(path.join(testDir, 'src/pages'))).toBe(true);
-      expect(await pathExists(path.join(testDir, 'src/widgets'))).toBe(true);
-      expect(await pathExists(path.join(testDir, 'src/entities'))).toBe(true);
-    });
 
-    it('should create atomic design structure', async () => {
-      const ctx: ConfiguratorContext = {
-        projectPath: testDir,
-        selections: {
-          projectName: 'test-project', framework: 'react', variant: 'ts', language: 'typescript',
-          styling: 'tailwind', ui: 'none', forms: 'none', state: 'none',
-          routing: 'none', dataFetching: 'none', icons: 'none',
-          structure: 'atomic',
-        },
-      };
-
-      await structureConfigurator(ctx);
-
-      expect(await pathExists(path.join(testDir, 'src/components/atoms'))).toBe(true);
-      expect(await pathExists(path.join(testDir, 'src/components/molecules'))).toBe(true);
-    });
   });
 
 

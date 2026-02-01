@@ -45,6 +45,11 @@ export const writeFile = async (filePath: string, content: string): Promise<void
   await fs.writeFile(filePath, content);
 };
 
+// Append to file
+export const appendFile = async (filePath: string, content: string): Promise<void> => {
+  await fs.appendFile(filePath, content);
+};
+
 // Remove file
 export const removeFile = async (filePath: string): Promise<void> => {
   await fs.unlink(filePath);

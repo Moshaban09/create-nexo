@@ -12,10 +12,7 @@ export const createReadme = async (ctx: ConfiguratorContext): Promise<void> => {
     state,
     routing,
     dataFetching,
-    structure,
     testing,
-
-
   } = ctx.selections;
 
   const runCmd = 'npm run';
@@ -84,23 +81,7 @@ This project uses Tailwind CSS v4.
 \n`;
   }
 
-  if (structure === 'clean') {
-    content += `## 📂 Project Structure (Clean Architecture)
-- \`src/domain\`: Entities and business logic (Framework independent).
-- \`src/application\`: Use cases and services.
-- \`src/infrastructure\`: API calls, storage, third-party services.
-- \`src/presentation\`: UI components, pages, hooks.
-\n`;
-  } else if (structure === 'fsd') {
-    content += `## 📂 Project Structure (Feature-Sliced Design)
-- \`app\`: Global app setup (providers, styles).
-- \`pages\`: Route components.
-- \`widgets\`: Composition of entities/features.
-- \`features\`: User interactions (e.g. Auth, Search).
-- \`entities\`: Business entities (e.g. User, Product).
-- \`shared\`: Reusable UI, libs, api.
-\n`;
-  }
+
 
   if (testing) {
     content += `## 🧪 Testing
@@ -121,7 +102,7 @@ This project is licensed under the MIT License.
 
 // Helpers for display names
 function getStylingName(s: string) {
-  const map: Record<string, string> = { tailwind: 'Tailwind CSS', sass: 'Sass/SCSS', 'css-modules': 'CSS Modules' };
+  const map: Record<string, string> = { tailwind: 'Tailwind CSS', 'css-modules': 'CSS Modules' };
   return map[s] || s;
 }
 

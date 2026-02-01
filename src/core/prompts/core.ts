@@ -99,18 +99,6 @@ export const stylingPrompt: PromptConfig = {
       hover_note: 'CSS files where class names are scoped locally to avoid conflicts',
     },
 
-    {
-      value: 'sass',
-      name: 'Sass/SCSS',
-      comment: 'CSS with superpowers',
-      hover_note: 'Variables, nesting, mixins, and more - industry standard preprocessor',
-    },
-    {
-      value: 'styled-components',
-      name: 'Styled Components',
-      comment: 'CSS-in-JS solution',
-      hover_note: 'Write actual CSS code inside your React components',
-    },
   ],
 };
 
@@ -181,18 +169,6 @@ export const formsPrompt: PromptConfig = {
       name: 'React Hook Form + Yup',
       comment: 'Performant with Yup validation',
       hover_note: 'Well-established validation library with good ecosystem',
-    },
-    {
-      value: 'formik-zod',
-      name: 'Formik + Zod',
-      comment: 'Popular form library + Zod',
-      hover_note: 'Formik\'s simplicity with Zod\'s type inference',
-    },
-    {
-      value: 'formik-yup',
-      name: 'Formik + Yup',
-      comment: 'Traditional Formik setup',
-      hover_note: 'Classic combination for form handling',
     },
     {
       value: 'tanstack-form',
@@ -331,12 +307,6 @@ export const iconsPrompt: PromptConfig = {
       hover_note: 'Hand-crafted SVG icons designed to pair with Tailwind CSS',
     },
     {
-      value: 'fontawesome',
-      name: 'Font Awesome',
-      comment: 'Extensive icon library',
-      hover_note: 'Thousands of icons in multiple styles (solid, regular, brands)',
-    },
-    {
       value: 'none',
       name: 'None',
       comment: 'No icon library',
@@ -358,34 +328,6 @@ export const structurePrompt: PromptConfig = {
       folder_info: ['src/features/*', 'src/shared/*', 'src/app/*'],
     },
     {
-      value: 'fsd',
-      name: 'FSD (Feature-Sliced Design)',
-      comment: 'Architectural methodology',
-      hover_note: 'Layers → Slices → Segments - highly scalable architecture',
-      folder_info: ['src/app', 'src/pages', 'src/widgets', 'src/features', 'src/entities', 'src/shared'],
-    },
-    {
-      value: 'atomic',
-      name: 'Atomic Design',
-      comment: 'Atoms → Molecules → Organisms',
-      hover_note: 'Design system methodology by Brad Frost - great for component libraries',
-      folder_info: ['src/components/atoms', 'src/components/molecules', 'src/components/organisms'],
-    },
-    {
-      value: 'clean',
-      name: 'Clean Architecture',
-      comment: 'Domain-driven layers',
-      hover_note: 'Separation of concerns with domain, application, and infrastructure layers',
-      folder_info: ['src/domain', 'src/application', 'src/infrastructure', 'src/presentation'],
-    },
-    {
-      value: 'mvc',
-      name: 'MVC Pattern',
-      comment: 'Model-View-Controller',
-      hover_note: 'Classic pattern separating data, UI, and business logic',
-      folder_info: ['src/models', 'src/views', 'src/controllers'],
-    },
-    {
       value: 'simple',
       name: 'Simple',
       comment: 'Minimal structure',
@@ -405,7 +347,5 @@ export const corePrompts: PromptConfig[] = [
   routingPrompt,
   dataFetchingPrompt,
   iconsPrompt,
-  structurePrompt,
-  packageManagerPrompt,
 ];
 

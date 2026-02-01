@@ -19,7 +19,7 @@ import {
 describe('Prompts Module', () => {
   describe('allPrompts', () => {
     it('should contain all core prompts', () => {
-      expect(allPrompts).toHaveLength(11); // 10 core + 1 optional feature
+      expect(allPrompts).toHaveLength(9); // Core prompts (structure now separate)
     });
 
     it('should have unique names for each prompt', () => {
@@ -62,18 +62,8 @@ describe('Prompts Module', () => {
       expect(tailwind).toBeDefined();
     });
 
-    it('should have 5 styling options', () => {
-      expect(stylingPrompt.options).toHaveLength(4);
-    });
-
-    it('should include sass option', () => {
-      const sass = stylingPrompt.options.find((o) => o.value === 'sass');
-      expect(sass).toBeDefined();
-    });
-
-    it('should include styled-components option', () => {
-      const sc = stylingPrompt.options.find((o) => o.value === 'styled-components');
-      expect(sc).toBeDefined();
+    it('should have 2 styling options', () => {
+      expect(stylingPrompt.options).toHaveLength(2);
     });
   });
 
@@ -172,13 +162,8 @@ describe('Prompts Module', () => {
       expect(fb).toBeDefined();
     });
 
-    it('should have 6 structure options', () => {
-      expect(structurePrompt.options).toHaveLength(6);
-    });
-
-    it('should have FSD option', () => {
-      const fsd = structurePrompt.options.find((o) => o.value === 'fsd');
-      expect(fsd).toBeDefined();
+    it('should have 2 structure options', () => {
+      expect(structurePrompt.options).toHaveLength(2);
     });
   });
 
@@ -191,8 +176,8 @@ describe('Prompts Module', () => {
       expect(optionalFeaturesPrompt.type).toBe('checkbox');
     });
 
-    it('should have 5 optional features', () => {
-      expect(optionalFeaturesPrompt.options).toHaveLength(5);
+    it('should have 6 optional features', () => {
+      expect(optionalFeaturesPrompt.options).toHaveLength(6);
     });
 
     it('should include testing option', () => {

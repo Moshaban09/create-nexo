@@ -14,7 +14,7 @@ const TECH_ICONS: Record<string, string> = {
   'React Compiler': '🚀',
   SWC: '🦀',
   'Tailwind CSS': '🌊',
-  'Sass/SCSS': '💅',
+
   'CSS Modules': '📦',
   'shadcn/ui': '🎨',
   'Radix UI': '🔘',
@@ -32,14 +32,13 @@ const TECH_ICONS: Record<string, string> = {
   'Fetch API': '🌐',
   'React Hook Form + Zod': '📝',
   'React Hook Form + Yup': '📝',
-  'Formik + Zod': '📋',
-  'Formik + Yup': '📋',
+  'TanStack Form': '📝',
   Vitest: '🧪',
   Jest: '🃏',
   'ESLint + Prettier': '✨',
   Biome: '🌿',
   'Framer Motion': '🎬',
-  'React Spring': '🌸',
+  'GSAP': '💫',
 };
 
 interface TechItem {
@@ -67,7 +66,6 @@ const buildTechStack = (ctx: ConfiguratorContext): TechItem[] => {
   // Styling
   const stylingNames: Record<string, string> = {
     tailwind: 'Tailwind CSS',
-    sass: 'Sass/SCSS',
     'css-modules': 'CSS Modules',
   };
   if (stylingNames[styling]) {
@@ -125,8 +123,7 @@ const buildTechStack = (ctx: ConfiguratorContext): TechItem[] => {
   const formNames: Record<string, string> = {
     'rhf-zod': 'React Hook Form + Zod',
     'rhf-yup': 'React Hook Form + Yup',
-    'formik-zod': 'Formik + Zod',
-    'formik-yup': 'Formik + Yup',
+    'tanstack-form': 'TanStack Form',
   };
   if (forms && forms !== 'none' && formNames[forms]) {
     const name = formNames[forms];

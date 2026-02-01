@@ -107,6 +107,12 @@ export const configuratorRegistry: Record<string, LazyConfiguratorConfig> = {
     dependencies: ['language'],
     condition: (ctx) => ctx.selections.animation !== undefined && ctx.selections.animation !== 'none',
   },
+  backend: {
+    loader: () => import('../configurators/state/backend.js'),
+    exportName: 'backendConfigurator',
+    dependencies: ['language'],
+    condition: (ctx) => ctx.selections.backend !== undefined && ctx.selections.backend !== 'none',
+  },
 
   // Project
   structure: {

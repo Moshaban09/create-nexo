@@ -19,7 +19,7 @@ type DependencyConfigs = Record<string, DependencyConfig>;
  * ```typescript
  * const FORMS_CONFIGS = {
  *   'rhf-zod': { 'react-hook-form': '^7.54.0', 'zod': '^3.24.0' },
- *   'formik-yup': { 'formik': '^2.4.6', 'yup': '^1.6.0' },
+ *   'tanstack-form': { '@tanstack/react-form': '^1.31.0', 'zod': '^3.25.0' },
  * };
  *
  * export const formsConfigurator = createDependencyConfigurator('forms', FORMS_CONFIGS);

@@ -8,12 +8,6 @@ const ANIMATION_CONFIGS = {
     'gsap': '^3.14.2',
     '@gsap/react': '^2.1.2',
   },
-  'react-spring': {
-    '@react-spring/web': '^9.8.0',
-  },
-  'auto-animate': {
-    '@formkit/auto-animate': '^0.8.2',
-  },
 };
 
 export const animationConfigurator = createDependencyConfigurator('animation', ANIMATION_CONFIGS);

@@ -1,17 +1,17 @@
 import os from 'node:os';
 import {
-  DATA_FETCHING_OPTIONS,
-  FORMS_OPTIONS,
-  FRAMEWORK_OPTIONS,
-  ICONS_OPTIONS,
-  MAX_PATH_COMPONENT,
-  ROUTING_OPTIONS,
-  STATE_OPTIONS,
-  STRUCTURE_OPTIONS,
-  STYLING_OPTIONS,
-  UI_OPTIONS,
-  VARIANT_OPTIONS,
-  WINDOWS_MAX_PATH,
+    DATA_FETCHING_OPTIONS,
+    FORMS_OPTIONS,
+    FRAMEWORK_OPTIONS,
+    ICONS_OPTIONS,
+    MAX_PATH_COMPONENT,
+    ROUTING_OPTIONS,
+    STATE_OPTIONS,
+    STRUCTURE_OPTIONS,
+    STYLING_OPTIONS,
+    UI_OPTIONS,
+    VARIANT_OPTIONS,
+    WINDOWS_MAX_PATH,
 } from '../constants/index.js';
 import { CompatibilityError, ValidationError } from '../errors/index.js';
 
@@ -54,7 +54,7 @@ export const VALID_OPTIONS = {
   testing: ['vitest', 'jest'] as const,
   linting: ['eslint-prettier', 'biome'] as const,
   api: ['openapi', 'graphql', 'trpc'] as const,
-  animation: ['framer-motion', 'react-spring'] as const,
+  animation: ['framer-motion', 'gsap'] as const,
 } as const;
 
 // ============================================
@@ -105,15 +105,6 @@ export const compatibilityRules: CompatibilityRule[] = [
     severity: 'warning',
   },
 
-  // Forms + Validation combinations
-  {
-    name: 'formik-yup-legacy-warning',
-    check: (s) => s.forms === 'formik-yup',
-    message: 'Formik + Yup is considered legacy - React Hook Form offers better performance',
-    suggestion: 'Consider using "rhf-zod" for better performance and type safety',
-    severity: 'warning',
-  },
-
   // UI Library bundle warnings
   {
     name: 'antd-bundle-warning',
@@ -133,13 +124,6 @@ export const compatibilityRules: CompatibilityRule[] = [
 
 
   // Structure recommendations
-  {
-    name: 'fsd-typescript-recommended',
-    check: (s) => s.structure === 'fsd' && !s.variant?.startsWith('ts'),
-    message: 'Feature-Sliced Design benefits greatly from TypeScript',
-    suggestion: 'Consider using TypeScript for better FSD experience',
-    severity: 'warning',
-  },
 ];
 
 // ============================================

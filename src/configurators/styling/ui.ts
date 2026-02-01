@@ -1,7 +1,6 @@
-import { appendFile } from 'node:fs/promises';
 import path from 'node:path';
 import { ConfiguratorContext } from '../../types/index.js';
-import { ensureDir, writeFile } from '../../utils/index.js';
+import { appendFile, ensureDir, writeFile } from '../../utils/index.js';
 
 const UI_CONFIGS: Record<string, Record<string, string>> = {
   shadcn: {
@@ -32,9 +31,6 @@ const UI_CONFIGS: Record<string, Record<string, string>> = {
   chakra: {
     '@chakra-ui/react': '^3.31.0',
     '@emotion/react': '^11.14.0',
-  },
-  'styled-components': {
-    'styled-components': '^6.3.8',
   },
 
 };

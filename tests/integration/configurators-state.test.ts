@@ -119,4 +119,92 @@ describe('State Configurators', () => {
       expect(pkgFile.dependencies.axios).toBeDefined();
     });
   });
+
+  describe('backendConfigurator', () => {
+    let backendConfigurator: typeof import('../../src/configurators/state/backend').backendConfigurator;
+
+    beforeEach(async () => {
+      const backendModule = await import('../../src/configurators/state/backend');
+      backendConfigurator = backendModule.backendConfigurator;
+    });
+
+    it('should add Supabase dependency and create client file', async () => {
+      ctx.selections.backend = 'supabase';
+      await backendConfigurator(ctx);
+      await ctx.pkg.save();
+
+      const pkgFile = await readJson<{ dependencies: Record<string, string> }>(path.join(testDir, 'package.json'));
+      expect(pkgFile.dependencies['@supabase/supabase-js']).toBeDefined();
+
+      // Check client file was created
+      const clientFile = path.join(testDir, 'src/lib/supabase.ts');
+      const clientExists = await fs.access(clientFile).then(() => true).catch(() => false);
+      expect(clientExists).toBe(true);
+    });
+
+    it('should add Firebase dependency and create client file', async () => {
+      ctx.selections.backend = 'firebase';
+      await backendConfigurator(ctx);
+      await ctx.pkg.save();
+
+      const pkgFile = await readJson<{ dependencies: Record<string, string> }>(path.join(testDir, 'package.json'));
+      expect(pkgFile.dependencies.firebase).toBeDefined();
+
+      // Check client file was created
+      const clientFile = path.join(testDir, 'src/lib/firebase.ts');
+      const clientExists = await fs.access(clientFile).then(() => true).catch(() => false);
+      expect(clientExists).toBe(true);
+    });
+
+    it('should add Clerk dependency and create provider file', async () => {
+      ctx.selections.backend = 'clerk';
+      await backendConfigurator(ctx);
+      await ctx.pkg.save();
+
+      const pkgFile = await readJson<{ dependencies: Record<string, string> }>(path.join(testDir, 'package.json'));
+      expect(pkgFile.dependencies['@clerk/clerk-react']).toBeDefined();
+
+      // Check provider file was created
+      const providerFile = path.join(testDir, 'src/providers/clerk.tsx');
+      const providerExists = await fs.access(providerFile).then(() => true).catch(() => false);
+      expect(providerExists).toBe(true);
+    });
+
+    it('should add Prisma dependency and create schema file', async () => {
+      ctx.selections.backend = 'prisma';
+      await backendConfigurator(ctx);
+      await ctx.pkg.save();
+
+      const pkgFile = await readJson<{ dependencies: Record<string, string> }>(path.join(testDir, 'package.json'));
+      expect(pkgFile.dependencies['@prisma/client']).toBeDefined();
+
+      // Check schema file was created
+      const schemaFile = path.join(testDir, 'prisma/schema.prisma');
+      const schemaExists = await fs.access(schemaFile).then(() => true).catch(() => false);
+      expect(schemaExists).toBe(true);
+    });
+
+    it('should do nothing for none backend selection', async () => {
+      ctx.selections.backend = 'none';
+      await backendConfigurator(ctx);
+      await ctx.pkg.save();
+
+      const pkgFile = await readJson<{ dependencies: Record<string, string> }>(path.join(testDir, 'package.json'));
+      expect(pkgFile.dependencies['@supabase/supabase-js']).toBeUndefined();
+      expect(pkgFile.dependencies.firebase).toBeUndefined();
+    });
+
+    it('should create .env.example file', async () => {
+      ctx.selections.backend = 'supabase';
+      await backendConfigurator(ctx);
+
+      const envFile = path.join(testDir, '.env.example');
+      const envExists = await fs.access(envFile).then(() => true).catch(() => false);
+      expect(envExists).toBe(true);
+
+      const content = await fs.readFile(envFile, 'utf-8');
+      expect(content).toContain('VITE_SUPABASE_URL');
+      expect(content).toContain('VITE_SUPABASE_ANON_KEY');
+    });
+  });
 });

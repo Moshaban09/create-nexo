@@ -61,32 +61,6 @@ body {
 
 
 
-    case 'sass':
-      if (ctx.pkg) {
-        ctx.pkg.add('sass', '^1.90.0', true);
-      }
-      await ensureDir(path.join(ctx.projectPath, 'src'));
-      await ensureDir(path.join(ctx.projectPath, 'src', 'styles'));
-
-      // Create main SCSS file
-      await writeFile(
-        path.join(ctx.projectPath, 'src', 'index.scss'),
-        `// Import variables and mixins\n@import './styles/variables';\n@import './styles/mixins';\n\n* {\n  margin: 0;\n  padding: 0;\n  box-sizing: border-box;\n}\n\n:root {\n  font-family: $font-family;\n  line-height: 1.5;\n}\n`
-      );
-
-      // Create variables file
-      await writeFile(
-        path.join(ctx.projectPath, 'src', 'styles', '_variables.scss'),
-        `// Colors\n$primary: #646cff;\n$secondary: #535bf2;\n$background: #ffffff;\n$text: #213547;\n\n// Typography\n$font-family: ${isRtl ? "'Cairo', " : ''}system-ui, -apple-system, sans-serif;\n$font-size-base: 16px;\n\n// Spacing\n$spacing-unit: 8px;\n`
-      );
-
-      // Create mixins file
-      await writeFile(
-        path.join(ctx.projectPath, 'src', 'styles', '_mixins.scss'),
-        `// Responsive breakpoints\n@mixin mobile {\n  @media (max-width: 768px) {\n    @content;\n  }\n}\n\n@mixin tablet {\n  @media (max-width: 1024px) {\n    @content;\n  }\n}\n\n// Flexbox helpers\n@mixin flex-center {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n}\n`
-      );
-      break;
-
     default:
       // No additional setup needed for default/none styling
       break;

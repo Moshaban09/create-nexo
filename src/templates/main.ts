@@ -18,9 +18,9 @@ export const createMainFile = async (
   ext: string
 ): Promise<void> => {
   const srcDir = path.join(ctx.projectPath, 'src');
-  const { variant, styling, ui, state, routing, dataFetching } = ctx.selections;
+  const { variant, ui, state, routing, dataFetching } = ctx.selections;
   const isTypeScript = variant.startsWith('ts');
-  const styleExt = styling === 'sass' ? 'scss' : 'css';
+  const styleExt = 'css';
 
   const imports: string[] = [
     "import { StrictMode } from 'react'",
@@ -56,12 +56,6 @@ export const createMainFile = async (
     const isRtl = ctx.selections.rtl === true;
     imports.push("import { ConfigProvider } from 'antd'");
     providers.push({ start: `<ConfigProvider${isRtl ? ' direction="rtl"' : ''}>`, end: '</ConfigProvider>' });
-  } else if (ui === 'styled-components') {
-    imports.push("import { ThemeProvider } from 'styled-components'");
-    // We need a default theme object, usually imported or defined.
-    // For simplicity in a generator, we'll inline a basic empty theme or comment
-    imports.push("const theme = {}");
-    providers.push({ start: '<ThemeProvider theme={theme}>', end: '</ThemeProvider>' });
   }
 
   // 4. Routing

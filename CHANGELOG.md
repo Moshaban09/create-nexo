@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0] - 2026-02-01
+
+### 🚀 Major Features
+- **New**: **Backend Integration (BaaS)** — Optional prompts for backend services:
+  - **Supabase**: Client setup with `@supabase/supabase-js` and environment config.
+  - **Firebase**: Full Firebase SDK with Auth, Firestore exports.
+  - **Clerk**: ClerkProvider component with React integration.
+  - **Prisma**: Client singleton pattern with schema file generation.
+- **New**: **Client Files Generation** — Automatically creates `src/lib/` files with proper TypeScript/JavaScript support.
+- **New**: **Environment Templates** — Auto-generates `.env.example` with required variables for each backend.
+- **UX**: **Preset Management** — Added "🗑️ Manage presets" option to delete saved presets.
+- **UX**: **Improved Prompt Order** — Reorganized wizard flow: Core → Optional Features → Import Alias → Structure.
+
+### 🐛 Fixes & Quality
+- **Quality**: **Comprehensive Tests** — Added 7 integration tests for Backend Configurator and a Full Flow E2E verification test.
+- **Quality**: **Updated Dependencies** — All BaaS SDKs updated to latest versions.
+
+### 🗑️ Removed
+- **Removed**: **Formik** (Forms) — Removed Formik+Zod and Formik+Yup in favor of React Hook Form.
+- **Removed**: **FontAwesome** (Icons) — Available via react-icons package.
+- **Removed**: **React Spring** (Animation) — Consolidated to Framer Motion and GSAP.
+- **Removed**: **AutoAnimate** (Animation) — Simplified animation options.
+- **Removed**: **Sass** (Styling) — Native CSS Variables + Tailwind are preferred.
+- **Removed**: **Styled Components** (Styling) — High runtime overhead; use CSS Modules or Tailwind.
+- **Removed**: **Complex Structures** — Removed FSD, Atomic, MVC, Clean Architecture in favor of Feature-based.
+
 ## [1.7.2] - 2026-01-31
 
 ### 🚀 React Template Ecosystem & CLI Polish

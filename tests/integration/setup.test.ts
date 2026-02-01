@@ -64,7 +64,7 @@ describe('E2E: Full Project Setup', () => {
       framework: 'react',
       variant: 'ts-swc',
       language: 'typescript',
-      styling: 'sass',
+      styling: 'tailwind',
       ui: 'none',
       forms: 'none',
       state: 'none',
@@ -82,7 +82,7 @@ describe('E2E: Full Project Setup', () => {
 
     const pkg = await readJson<{ devDependencies: Record<string, string> }>(path.join(projectDir, 'package.json'));
     expect(pkg.devDependencies['@vitejs/plugin-react-swc']).toBeDefined();
-    expect(pkg.devDependencies.sass).toBeDefined();
+
   }, 60000);
 
   it('should create a JavaScript project', async () => {
@@ -113,32 +113,7 @@ describe('E2E: Full Project Setup', () => {
     expect(await pathExists(path.join(projectDir, 'src/main.jsx'))).toBe(true);
   }, 60000);
 
-  it('should create FSD structure', async () => {
-    const selections: UserSelections = {
-      projectName: 'fsd-app',
-      framework: 'react',
-      variant: 'ts',
-      language: 'typescript',
-      styling: 'tailwind',
-      ui: 'none',
-      forms: 'none',
-      state: 'none',
-      routing: 'none',
-      dataFetching: 'none',
-      icons: 'none',
-      structure: 'fsd',
-      i18n: 'none',
-      auth: 'none',
-    };
 
-    await setup({ selections, targetDir: testDir });
-
-    projectDir = path.join(testDir, 'fsd-app');
-
-    expect(await pathExists(path.join(projectDir, 'src/pages'))).toBe(true);
-    expect(await pathExists(path.join(projectDir, 'src/widgets'))).toBe(true);
-    expect(await pathExists(path.join(projectDir, 'src/entities'))).toBe(true);
-  }, 60000);
   it('should create AI instructions', async () => {
     const selections: UserSelections = {
       projectName: 'ai-app',

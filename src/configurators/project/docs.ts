@@ -16,7 +16,6 @@ const DOCS_LINKS: Record<string, DocLink> = {
   // Styling
   tailwind: { name: 'Tailwind CSS', url: 'https://tailwindcss.com/docs' },
   'css-modules': { name: 'CSS Modules', url: 'https://github.com/css-modules/css-modules' },
-  sass: { name: 'Sass', url: 'https://sass-lang.com/documentation' },
 
   // UI Libraries
   shadcn: { name: 'Shadcn/ui', url: 'https://ui.shadcn.com/docs' },
@@ -25,7 +24,6 @@ const DOCS_LINKS: Record<string, DocLink> = {
   chakra: { name: 'Chakra UI', url: 'https://chakra-ui.com/docs/get-started' },
   heroui: { name: 'HeroUI', url: 'https://heroui.com/docs/guide/introduction' },
   radix: { name: 'Radix UI', url: 'https://www.radix-ui.com/primitives/docs/overview/introduction' },
-  'styled-components': { name: 'Styled Components', url: 'https://styled-components.com/docs' },
 
   // State Management
   zustand: { name: 'Zustand', url: 'https://zustand.docs.pmnd.rs' },
@@ -43,8 +41,6 @@ const DOCS_LINKS: Record<string, DocLink> = {
   // Forms
   'rhf-zod': { name: 'React Hook Form + Zod', url: 'https://react-hook-form.com/get-started' },
   'rhf-yup': { name: 'React Hook Form + Yup', url: 'https://react-hook-form.com/get-started' },
-  'formik-zod': { name: 'Formik', url: 'https://formik.org/docs/overview' },
-  'formik-yup': { name: 'Formik + Yup', url: 'https://formik.org/docs/overview' },
   'tanstack-form': { name: 'TanStack Form', url: 'https://tanstack.com/form/latest/docs/overview' },
 
   // Icons
@@ -52,13 +48,10 @@ const DOCS_LINKS: Record<string, DocLink> = {
   'react-icons': { name: 'React Icons', url: 'https://react-icons.github.io/react-icons' },
   iconify: { name: 'Iconify', url: 'https://iconify.design/docs' },
   heroicons: { name: 'Heroicons', url: 'https://heroicons.com' },
-  fontawesome: { name: 'Font Awesome', url: 'https://fontawesome.com/docs' },
 
   // Animation
   'framer-motion': { name: 'Framer Motion', url: 'https://motion.dev/docs/react-quick-start' },
   gsap: { name: 'GSAP', url: 'https://gsap.com/docs/v3' },
-  'react-spring': { name: 'React Spring', url: 'https://www.react-spring.dev/docs/getting-started' },
-  'auto-animate': { name: 'AutoAnimate', url: 'https://auto-animate.formkit.com' },
 
   // Testing
   vitest: { name: 'Vitest', url: 'https://vitest.dev/guide' },

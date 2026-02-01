@@ -4,18 +4,16 @@ import path from 'node:path';
 import pc from 'picocolors';
 import { estimateBundleSize, formatSize } from '../../core/insights/bundle-size.js';
 import {
-    corePrompts,
-    optionalFeaturesPrompt,
-    optionalSubPrompts
+  corePrompts,
+  optionalFeaturesPrompt,
+  optionalSubPrompts
 } from '../../core/prompts.js';
 import { config } from '../../core/user-config.js';
 import { type PromptOption, type UserSelections } from '../../types/index.js';
 import {
-    detectAvailableManagers,
-    detectProjectConfig,
-    isDirEmpty
+  detectProjectConfig,
+  isDirEmpty
 } from '../../utils/index.js';
-import { type PackageManagerName } from '../../utils/pm-utils.js';
 import { prefetchPackages } from '../../utils/prefetch.js';
 
 /**
@@ -36,7 +34,7 @@ export async function handleInteractiveFlow(
 ): Promise<UserSelections | null> {
 
 
-  const availableManagers = detectAvailableManagers();
+
   const projectPath = path.resolve(targetDir, projectName);
 
   // Check for existing directory
@@ -108,8 +106,8 @@ export async function handleInteractiveFlow(
   }
 
   // Check for Custom Presets
-  const { loadPresets } = await import('../../utils/presets-manager.js');
-  const customPresets = await loadPresets();
+  const { loadPresets, deletePreset } = await import('../../utils/presets-manager.js');
+  let customPresets = await loadPresets();
 
   if (customPresets.length > 0) {
     const usePreset = await p.select({
@@ -120,39 +118,53 @@ export async function handleInteractiveFlow(
           value: preset.name,
           label: preset.name,
           hint: `Last used: ${new Date(preset.createAt).toLocaleDateString()}`
-        }))
+        })),
+        { value: 'manage', label: '🗑️  Manage presets', hint: 'Delete saved presets' }
       ]
     });
 
     if (p.isCancel(usePreset)) return null;
 
-    if (usePreset !== 'none') {
+    // Handle manage presets
+    if (usePreset === 'manage') {
+      let managing = true;
+      while (managing && customPresets.length > 0) {
+        const toDelete = await p.select({
+          message: 'Select a preset to delete:',
+          options: [
+            ...customPresets.map(preset => ({
+              value: preset.name,
+              label: `🗑️  ${preset.name}`,
+              hint: `Created: ${new Date(preset.createAt).toLocaleDateString()}`
+            })),
+            { value: 'done', label: '← Back', hint: 'Return to setup' }
+          ]
+        });
+
+        if (p.isCancel(toDelete) || toDelete === 'done') {
+          managing = false;
+        } else {
+          const confirmDelete = await p.confirm({
+            message: `Delete preset "${toDelete}"?`,
+            initialValue: false
+          });
+
+          if (!p.isCancel(confirmDelete) && confirmDelete) {
+            await deletePreset(toDelete as string);
+            customPresets = await loadPresets();
+            p.log.success(`Deleted preset "${toDelete}"`);
+          }
+        }
+      }
+      // After managing, continue with manual setup
+    } else if (usePreset !== 'none') {
       const selectedPreset = customPresets.find(p => p.name === usePreset);
       if (selectedPreset) {
          p.note(`Loaded preset "${selectedPreset.name}"`, '✨ Preset Loaded');
-         // Return with preset selections but ensure project name is correct
          return {
            ...selectedPreset.selections,
            projectName,
-           // Ensure installDependencies is false so we can ask or auto-set it later if we wanted,
-           // but wait, the plan says return it.
-           // We need to make sure we don't skip the auto-install prompt if it's not in the preset or if we want to ask again.
-           // However, to be consistent with "Presets", we should probably just return it.
-           // But wait, the auto-install prompt happens at the end of this function.
-           // This function returns UserSelections.
-           // If we return here, we skip the rest of the prompts (GOOD).
-           // But we still need to handle the "Install dependencies?" prompt?
-           // The "Install dependencies" prompt is INSIDE handleInteractiveFlow at the end.
-           // So if we return early here, we skip that prompt!
-           // We should probably ask for install dependencies here too or refactor.
-           // For now, let's just return and let user handle install manually or we can duplicate the prompt.
-           // BETTER: Return the object, and let the caller `createAction` handle the install step?
-           // `handleInteractiveFlow` returns `UserSelections`.
-           // `UserSelections` has `installDependencies`.
-           // If we return here, `createAction` gets the object.
-           // `createAction` checks `selections.installDependencies`.
-           // So we should ask for it here too if we want auto-install.
-           installDependencies: true // Default to true if using preset? Or ask?
+           installDependencies: true
          } as UserSelections;
       }
     }
@@ -165,6 +177,10 @@ export async function handleInteractiveFlow(
       projectName,
       packageManager: 'npm',
     };
+
+    // Auto-detect package manager
+    const { detectPackageManagerUsed } = await import('../../utils/pm-utils.js');
+    answers.packageManager = detectPackageManagerUsed();
 
     // Check for Custom Presets (only on first run or if we want to re-offer them)
     // For simplicity, let's keep custom presets check outside or inside?
@@ -191,25 +207,13 @@ export async function handleInteractiveFlow(
         explain('Local state (useState) is sufficient for simple apps.\nZustand is a lightweight, scalable global state manager.\nRedux is powerful but has more boilerplate.');
       } else if (promptConfig.name === 'dataFetching') {
         explain('TanStack Query (React Query) handles caching, deduplication, and background updates automatically.');
-      } else if (promptConfig.name === 'packageManager') {
-        explain('pnpm and Bun are significantly faster than npm.\nWe recommend using them for faster installation times.');
       }
 
       const options = promptConfig.options.map((opt: PromptOption) => ({
         value: opt.value,
-        label: promptConfig.name === 'packageManager' && availableManagers.includes(opt.value as PackageManagerName) && opt.value !== 'npm'
-          ? `${opt.name} ${pc.green('(Recommended)')}`
-          : opt.name,
+        label: opt.name,
         hint: opt.hover_note,
       }));
-
-      // Skip packageManager prompt as we auto-detect it now for consistency
-      if (promptConfig.name === 'packageManager') {
-        const { detectPackageManagerUsed } = await import('../../utils/pm-utils.js');
-        answers.packageManager = detectPackageManagerUsed();
-        continue;
-      }
-
       const answer = await p.select({
         message: promptConfig.message,
         options,
@@ -237,14 +241,6 @@ export async function handleInteractiveFlow(
       }
     }
 
-    // Import Alias
-    const useAlias = await p.confirm({
-      message: 'Do you want to configure import alias (@/*)?',
-      initialValue: true,
-    });
-
-    if (p.isCancel(useAlias)) return null;
-
     // Optional features
     const optionalFeatures = await p.multiselect({
       message: 'Select optional features (Space to select):',
@@ -259,7 +255,7 @@ export async function handleInteractiveFlow(
     if (p.isCancel(optionalFeatures)) return null;
     answers.optionalFeatures = optionalFeatures as string[];
 
-    // Sub-prompts
+    // Sub-prompts for optional features
     for (const feature of optionalFeatures as string[]) {
       const subPrompt = optionalSubPrompts[feature];
       if (subPrompt) {
@@ -276,6 +272,33 @@ export async function handleInteractiveFlow(
         if (p.isCancel(subAnswer)) return null;
         answers[feature] = subAnswer as string | string[];
       }
+    }
+
+    // Import Alias
+    const useAlias = await p.confirm({
+      message: 'Do you want to configure import alias (@/*)?',
+      initialValue: true,
+    });
+
+    if (p.isCancel(useAlias)) return null;
+
+    // Project Structure (last prompt)
+    const { structurePrompt } = await import('../../core/prompts/core.js');
+    const structureAnswer = await p.select({
+      message: structurePrompt.message,
+      options: structurePrompt.options.map((opt: PromptOption) => ({
+        value: opt.value,
+        label: opt.name,
+        hint: opt.hover_note,
+      })),
+    });
+
+    if (p.isCancel(structureAnswer)) return null;
+    answers.structure = structureAnswer as string;
+
+    const selectedStructure = structurePrompt.options.find((o: PromptOption) => o.value === structureAnswer);
+    if (selectedStructure?.folder_info) {
+      p.note(selectedStructure.folder_info.join('\n'), '📁 Folders');
     }
 
     // Summary Preview
@@ -357,6 +380,11 @@ export async function handleInteractiveFlow(
       installDependencies: installDeps,
       rtl: (answers.optionalFeatures as string[]).includes('rtl-starter'),
       importAlias: useAlias,
+      // Optional features
+      testing: (answers.optionalFeatures as string[]).includes('testing') ? (answers.testing as string) : undefined,
+      linting: (answers.optionalFeatures as string[]).includes('linting') ? (answers.linting as string) : undefined,
+      animation: (answers.optionalFeatures as string[]).includes('animation') ? (answers.animation as string) : undefined,
+      backend: (answers.optionalFeatures as string[]).includes('backend') ? (answers.backend as string) : undefined,
     } as UserSelections;
 
     // Ask to save preset
@@ -385,4 +413,8 @@ export async function handleInteractiveFlow(
     return selections;
   }
 
+
 }
+
+
+

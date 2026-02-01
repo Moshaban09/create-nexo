@@ -27,7 +27,6 @@ export const STYLING_OPTIONS = {
   TAILWIND: 'tailwind',
   CSS_MODULES: 'css-modules',
 
-  SASS: 'sass',
 } as const;
 
 export type StylingOption = (typeof STYLING_OPTIONS)[keyof typeof STYLING_OPTIONS];
@@ -77,8 +76,7 @@ export type StateOption = (typeof STATE_OPTIONS)[keyof typeof STATE_OPTIONS];
 export const FORMS_OPTIONS = {
   RHF_ZOD: 'rhf-zod',
   RHF_YUP: 'rhf-yup',
-  FORMIK_ZOD: 'formik-zod',
-  FORMIK_YUP: 'formik-yup',
+  TANSTACK_FORM: 'tanstack-form',
   NONE: 'none',
 } as const;
 
@@ -116,7 +114,6 @@ export type DataFetchingOption = (typeof DATA_FETCHING_OPTIONS)[keyof typeof DAT
 export const ICONS_OPTIONS = {
   LUCIDE: 'lucide',
   HEROICONS: 'heroicons',
-  FONTAWESOME: 'fontawesome',
   NONE: 'none',
 } as const;
 
@@ -128,10 +125,6 @@ export type IconsOption = (typeof ICONS_OPTIONS)[keyof typeof ICONS_OPTIONS];
 
 export const STRUCTURE_OPTIONS = {
   FEATURE_BASED: 'feature-based',
-  FSD: 'fsd',
-  ATOMIC: 'atomic',
-  CLEAN: 'clean',
-  MVC: 'mvc',
   SIMPLE: 'simple',
 } as const;
 

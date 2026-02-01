@@ -13,11 +13,6 @@ const ICONS_CONFIGS = {
   heroicons: {
     '@heroicons/react': '^2.2.0',
   },
-  fontawesome: {
-    '@fortawesome/fontawesome-svg-core': '^6.7.0',
-    '@fortawesome/free-solid-svg-icons': '^6.7.0',
-    '@fortawesome/react-fontawesome': '^0.2.2',
-  },
 };
 
 export const iconsConfigurator = createDependencyConfigurator('icons', ICONS_CONFIGS);

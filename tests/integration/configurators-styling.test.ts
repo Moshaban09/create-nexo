@@ -4,7 +4,7 @@ import path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 import { stylingConfigurator } from '../../src/configurators/styling/styling';
 import { ConfiguratorContext } from '../../src/types';
-import { pathExists, readJson, writeJson } from '../../src/utils/fs';
+import { readJson, writeJson } from '../../src/utils/fs';
 
 describe('Styling Configurators', () => {
   let testDir: string;
@@ -78,23 +78,9 @@ describe('Styling Configurators', () => {
       expect(viteConfig).toContain('tailwindcss()');
     });
 
-    it('should add Sass dependencies for sass styling', async () => {
-      ctx.selections.styling = 'sass';
-      await stylingConfigurator(ctx);
-      await ctx.pkg.save();
 
-      const pkgFile = await readJson<{ devDependencies: Record<string, string> }>(path.join(testDir, 'package.json'));
-      expect(pkgFile.devDependencies.sass).toBeDefined();
-    });
 
-    it('should create SCSS files for sass styling', async () => {
-      ctx.selections.styling = 'sass';
-      await stylingConfigurator(ctx);
-      await ctx.pkg.save();
 
-      expect(await pathExists(path.join(testDir, 'src/index.scss'))).toBe(true);
-      expect(await pathExists(path.join(testDir, 'src/styles/_variables.scss'))).toBe(true);
-    });
 
 
   });
