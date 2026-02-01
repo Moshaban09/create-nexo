@@ -22,7 +22,8 @@ export const createCommand: Command = {
     { flags: '--template <repo>', description: 'Clone a template from GitHub (e.g., user/repo)' },
     { flags: '--audit', description: 'Enable security audit during installation' },
     { flags: '--strict', description: 'Enable strict dependency resolution (disable --legacy-peer-deps)' },
-    { flags: '--rtl', description: 'Enable Arabic & RTL support with Cairo font' }
+    { flags: '--rtl', description: 'Enable Arabic & RTL support with Cairo font' },
+    { flags: '--silent', description: 'Run in silent mode without console output' }
   ],
   action: async (name: string | undefined, options: CreateOptions) => {
     // Dynamically import the action logic only when executed

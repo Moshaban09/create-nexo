@@ -6,15 +6,18 @@ exports[`File Tree Snapshots > should generate correct file tree for Clean Archi
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── domain/
-    ├── application/
-    ├── infrastructure/
-    └── presentation/
+    ├── components/
+    ├── hooks/
+    ├── utils/
+    └── assets/
 "
 `;
 
@@ -24,17 +27,18 @@ exports[`File Tree Snapshots > should generate correct file tree for FSD structu
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── app/
-    ├── pages/
-    ├── widgets/
-    ├── features/
-    ├── entities/
-    └── shared/
+    ├── components/
+    ├── hooks/
+    ├── utils/
+    └── assets/
 "
 `;
 
@@ -44,15 +48,14 @@ exports[`File Tree Snapshots > should generate correct file tree for React + Red
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── store/
-    │   ├── store.ts
-    │   ├── hooks.ts
-    │   └── counterSlice.ts
     ├── components/
     ├── hooks/
     ├── utils/
@@ -66,18 +69,21 @@ exports[`File Tree Snapshots > should generate correct file tree for React + Tai
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 ├── components.json
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── lib/
-    │   └── utils.ts
     ├── components/
     ├── hooks/
     ├── utils/
-    └── assets/
+    ├── assets/
+    └── lib/
+        └── utils.ts
 "
 `;
 
@@ -87,18 +93,25 @@ exports[`File Tree Snapshots > should generate correct file tree for full-featur
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 ├── components.json
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── lib/
-    │   └── utils.ts
-    ├── components/
-    ├── hooks/
-    ├── utils/
-    └── assets/
+    ├── app/
+    ├── features/
+    ├── shared/
+    │   ├── components/
+    │   ├── hooks/
+    │   ├── utils/
+    │   └── types/
+    ├── pages/
+    └── lib/
+        └── utils.ts
 "
 `;
 
@@ -107,7 +120,10 @@ exports[`File Tree Snapshots > should generate correct file tree for minimal Jav
 ├── vite.config.js
 ├── index.html
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.jsx
     ├── App.jsx
@@ -125,7 +141,10 @@ exports[`File Tree Snapshots > should generate correct file tree for minimal Typ
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -143,7 +162,10 @@ exports[`Optional Features Snapshots > should generate correct tree with linting
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -161,7 +183,10 @@ exports[`Optional Features Snapshots > should generate correct tree with linting
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -179,7 +204,10 @@ exports[`Optional Features Snapshots > should generate correct tree with testing
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -197,7 +225,10 @@ exports[`Optional Features Snapshots > should generate correct tree with testing
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -215,7 +246,10 @@ exports[`Optional Features Snapshots > should generate correct tree with testing
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -233,23 +267,8 @@ exports[`Selection Combinations Snapshots > should generate correct tree for css
 ├── index.html
 ├── tsconfig.json
 ├── README.md
-└── src/
-    ├── main.tsx
-    ├── App.tsx
-    ├── index.css
-    ├── domain/
-    ├── application/
-    ├── infrastructure/
-    └── presentation/
-"
-`;
-
-exports[`Selection Combinations Snapshots > should generate correct tree for css-modules + feature-based 1`] = `
-"├── package.json
-├── vite.config.ts
-├── index.html
-├── tsconfig.json
-├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -261,22 +280,45 @@ exports[`Selection Combinations Snapshots > should generate correct tree for css
 "
 `;
 
+exports[`Selection Combinations Snapshots > should generate correct tree for css-modules + feature-based 1`] = `
+"├── package.json
+├── vite.config.ts
+├── index.html
+├── tsconfig.json
+├── README.md
+├── DOCS.md
+├── .env.example
+└── src/
+    ├── main.tsx
+    ├── App.tsx
+    ├── index.css
+    ├── app/
+    ├── features/
+    ├── shared/
+    │   ├── components/
+    │   ├── hooks/
+    │   ├── utils/
+    │   └── types/
+    └── pages/
+"
+`;
+
 exports[`Selection Combinations Snapshots > should generate correct tree for css-modules + fsd 1`] = `
 "├── package.json
 ├── vite.config.ts
 ├── index.html
 ├── tsconfig.json
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── app/
-    ├── pages/
-    ├── widgets/
-    ├── features/
-    ├── entities/
-    └── shared/
+    ├── components/
+    ├── hooks/
+    ├── utils/
+    └── assets/
 "
 `;
 
@@ -286,6 +328,8 @@ exports[`Selection Combinations Snapshots > should generate correct tree for css
 ├── index.html
 ├── tsconfig.json
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -303,23 +347,8 @@ exports[`Selection Combinations Snapshots > should generate correct tree for sas
 ├── index.html
 ├── tsconfig.json
 ├── README.md
-└── src/
-    ├── main.tsx
-    ├── App.tsx
-    ├── index.css
-    ├── domain/
-    ├── application/
-    ├── infrastructure/
-    └── presentation/
-"
-`;
-
-exports[`Selection Combinations Snapshots > should generate correct tree for sass + feature-based 1`] = `
-"├── package.json
-├── vite.config.ts
-├── index.html
-├── tsconfig.json
-├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -331,22 +360,45 @@ exports[`Selection Combinations Snapshots > should generate correct tree for sas
 "
 `;
 
+exports[`Selection Combinations Snapshots > should generate correct tree for sass + feature-based 1`] = `
+"├── package.json
+├── vite.config.ts
+├── index.html
+├── tsconfig.json
+├── README.md
+├── DOCS.md
+├── .env.example
+└── src/
+    ├── main.tsx
+    ├── App.tsx
+    ├── index.css
+    ├── app/
+    ├── features/
+    ├── shared/
+    │   ├── components/
+    │   ├── hooks/
+    │   ├── utils/
+    │   └── types/
+    └── pages/
+"
+`;
+
 exports[`Selection Combinations Snapshots > should generate correct tree for sass + fsd 1`] = `
 "├── package.json
 ├── vite.config.ts
 ├── index.html
 ├── tsconfig.json
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── app/
-    ├── pages/
-    ├── widgets/
-    ├── features/
-    ├── entities/
-    └── shared/
+    ├── components/
+    ├── hooks/
+    ├── utils/
+    └── assets/
 "
 `;
 
@@ -356,6 +408,8 @@ exports[`Selection Combinations Snapshots > should generate correct tree for sas
 ├── index.html
 ├── tsconfig.json
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -373,25 +427,10 @@ exports[`Selection Combinations Snapshots > should generate correct tree for tai
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
-└── src/
-    ├── main.tsx
-    ├── App.tsx
-    ├── index.css
-    ├── domain/
-    ├── application/
-    ├── infrastructure/
-    └── presentation/
-"
-`;
-
-exports[`Selection Combinations Snapshots > should generate correct tree for tailwind + feature-based 1`] = `
-"├── package.json
-├── vite.config.ts
-├── index.html
-├── tsconfig.json
-├── tailwind.config.js
-├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
@@ -403,23 +442,49 @@ exports[`Selection Combinations Snapshots > should generate correct tree for tai
 "
 `;
 
+exports[`Selection Combinations Snapshots > should generate correct tree for tailwind + feature-based 1`] = `
+"├── package.json
+├── vite.config.ts
+├── index.html
+├── tsconfig.json
+├── tailwind.config.js
+├── postcss.config.js
+├── README.md
+├── DOCS.md
+├── .env.example
+└── src/
+    ├── main.tsx
+    ├── App.tsx
+    ├── index.css
+    ├── app/
+    ├── features/
+    ├── shared/
+    │   ├── components/
+    │   ├── hooks/
+    │   ├── utils/
+    │   └── types/
+    └── pages/
+"
+`;
+
 exports[`Selection Combinations Snapshots > should generate correct tree for tailwind + fsd 1`] = `
 "├── package.json
 ├── vite.config.ts
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx
     ├── index.css
-    ├── app/
-    ├── pages/
-    ├── widgets/
-    ├── features/
-    ├── entities/
-    └── shared/
+    ├── components/
+    ├── hooks/
+    ├── utils/
+    └── assets/
 "
 `;
 
@@ -429,7 +494,10 @@ exports[`Selection Combinations Snapshots > should generate correct tree for tai
 ├── index.html
 ├── tsconfig.json
 ├── tailwind.config.js
+├── postcss.config.js
 ├── README.md
+├── DOCS.md
+├── .env.example
 └── src/
     ├── main.tsx
     ├── App.tsx

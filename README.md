@@ -3,7 +3,7 @@
 # 🚀 NEXO CLI
 **Next-generation, extensible CLI for scaffolding and orchestrating modern frontend projects**
 
-[![npm version](https://img.shields.io/npm/v/create-nexo.svg?style=flat-square&color=cyan)](https://www.npmjs.com/package/create-nexo)
+[![npm version](https://img.shields.io/badge/npm-v1.8.1-cyan.svg?style=flat-square)](https://www.npmjs.com/package/create-nexo)
 [![npm downloads](https://img.shields.io/npm/dm/create-nexo.svg?style=flat-square&color=blue)](https://www.npmjs.com/package/create-nexo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](LICENSE)
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg?style=flat-square)](https://nodejs.org/)
@@ -20,8 +20,9 @@ NEXO combines a cutting-edge tech stack with a powerful orchestration engine for
 
 - ⚛️ **Modern Foundation** — Native **React 19** support with **React Compiler**, built for speed on the leading **Vite** engine.
 - 📜 **TypeScript First** — Strict **TS 5.7+** standards out of the box for ultimate type safety and reliability.
-- 🎨 **Visual Excellence** — Premier styling with **Tailwind CSS v4**, Sass, and official **shadcn/ui** and **HeroUI** integrations.
-- 🧱 **Scalable Architecture** — Professionally scaffolded **FSD**, **Feature-based**, and **Clean Architecture** patterns.
+- 🎨 **Visual Excellence** — Premier styling with **Tailwind CSS v4**, and official **shadcn/ui** and **HeroUI** integrations.
+- 🧱 **Structured Architecture** — Professionally scaffolded **Feature-based** architecture patterns for scalability.
+- 🔌 **Backend Integration (BaaS)** — Built-in setup for **Supabase**, **Firebase**, **Clerk**, and **Prisma** with auto-generated clients.
 - 🧠 **AI-Native Context** — Auto-generated `.nexo/ai-context.md` for perfect alignment with modern AI coding agents.
 - 📚 **Smart Documentation** — Auto-generated `DOCS.md` with direct links to official documentation for your chosen stack.
 - ⚡ **Instant Setup** — Zero-latency I/O with memory-resident `package.json` management; saved exactly once per project.
@@ -31,7 +32,6 @@ NEXO combines a cutting-edge tech stack with a powerful orchestration engine for
 - 🚀 **Atomic Orchestration** — Combined Git operations and parallel module loading for lightning-fast command execution.
 - 🛠️ **Unified Maintenance** — Total project health, security, and bundle auditing via the single `check` command.
 - 👀 **Dry Run Safety** — Preview every file and structural change before they ever touch your disk.
-- 📦 **Zero-Dependency Binary** — Entire CLI is bundled into a single file (~340KB) for instant installation and startup.
 - 🚚 **Multi-PM Support** — Native detection and optimization for **pnpm**, **Bun**, and **Yarn**.
 - 🏗️ **Template Cloning** — Lightning-fast scaffolding using **GitHub templates** with `giget` integration and **3-retry resilience**.
 - 🛡️ **Pre-Write Safety** — Permission checks, disk space validation (100MB+), and Windows **MAX_PATH** protection.
@@ -40,36 +40,39 @@ NEXO combines a cutting-edge tech stack with a powerful orchestration engine for
 - 📊 **Auto Version Resolution** — Automatically fetches latest package versions with graceful fallback to stable defaults.
 - 📈 **Install Stats** — Detailed performance metrics and caching summaries after every installation.
 - 🎨 **UI RTL-Ready** — Specialized support for **Ant Design** RTL configuration and professional Arabic typography.
+- 🔐 **Environment Templates** — Auto-generates `.env.example` with required variables for your chosen backend services.
 
 ---
 
 ## 📂 Project Structure
 
-NEXO generates a clean, scalable structure tailored to your choices (e.g., FSD, Feature-based).
+NEXO generates a clean, scalable structure tailored to your choices (e.g., Feature-based).
 
 ```plaintext
 my-app/
 ├── public/              # Static assets
 ├── src/
 │   ├── app/             # App providers & global layout
-│   ├── assets/          # Images, fonts, icons
-│   ├── components/      # Shared UI components
-│   ├── config/          # Environment & app config
 │   ├── features/        # Feature-based modules (slices)
-│   ├── hooks/           # Shared React hooks
-│   ├── lib/             # Utils, helpers, and third-party setups
 │   ├── pages/           # Route components
-│   ├── styles/          # Global styles (Tailwind/CSS Modules)
-│   ├── types/           # Shared TypeScript interfaces
+│   ├── shared/          # Shared components, hooks, and utils
+│   │   ├── components/
+│   │   ├── hooks/
+│   │   ├── utils/
+│   │   └── types/
+│   ├── lib/             # Generated clients (Supabase/Firebase/Prisma)
 │   ├── App.tsx          # Main entry component
 │   └── main.tsx         # Application entry point
 ├── .nexo/               # AI Context & Metadata
 ├── .cursorrules         # AI-specific coding rules
 ├── DOCS.md              # Documentation for your specific stack
+├── .env.example         # Environment templates
 ├── index.html
 ├── package.json
 └── vite.config.ts
 ```
+
+---
 
 ---
 
@@ -84,27 +87,26 @@ npx create-nexo@latest my-app -p dashboard
 
 # Or using the npm create shorthand
 npm create nexo@latest
-
-# Global installation (optional)
-npm install -g create-nexo
-nexo create my-app
 ```
 
 ---
 
 ## 🎯 Command Suite
 
+> [!TIP]
+> **Execution**: Always use `npx create-nexo` for the default command or `npx -p create-nexo nexo [command]` for specific actions.
+
 | Command | Description |
 |---------|-------------|
-| `nexo create` | Start a new project with interactive prompts |
-| `nexo create --audit` | Enable security audit during installation |
-| `nexo create --strict` | Enable strict dependency resolution |
-| `nexo create --template` | Clone a project from a GitHub template |
-| `nexo create --rtl` | Create an Arabic & RTL project instantly |
-| `nexo wizard` | Guided project creation for beginners |
-| `nexo presets` | List and use optimized project presets |
-| `nexo check` | Run system & project health checks |
-| `nexo update` | Self-update Nexo CLI to the latest version |
+| `npx create-nexo` | Start a new project with interactive prompts |
+| `npx create-nexo --audit` | Enable security audit during installation |
+| `npx create-nexo --strict` | Enable strict dependency resolution |
+| `npx create-nexo --template` | Clone a project from a GitHub template |
+| `npx create-nexo --rtl` | Create an Arabic & RTL project instantly |
+| `npx -p create-nexo nexo wizard` | Guided project creation for beginners (Alias: `w`) |
+| `npx -p create-nexo nexo presets` | List and use optimized project presets |
+| `npx -p create-nexo nexo check` | Run system & project health checks (Flags: `--system`, `--project`) |
+| `npx -p create-nexo nexo update` | Self-update Nexo CLI to the latest version |
 
 ---
 
@@ -124,6 +126,12 @@ nexo create my-app
 - **Zustand / Redux Toolkit** — Scalable state management.
 - **TanStack Query** — Advanced caching and data synchronization.
 - **TanStack Router / React Router** — Type-safe navigation.
+
+### Backend & Services
+- **Supabase** — Open source Firebase alternative.
+- **Firebase** — Google's mobile and web application development platform.
+- **Clerk** — Complete user management and authentication.
+- **Prisma** — Next-generation ORM for Node.js and TypeScript.
 
 ---
 

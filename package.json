@@ -1,6 +1,6 @@
 {
   "name": "create-nexo",
-  "version": "1.8.0",
+  "version": "1.8.1",
   "description": "NEXO is a next-generation, extensible CLI for scaffolding and orchestrating modern frontend projects",
   "type": "module",
   "bin": {
@@ -44,7 +44,12 @@
     "template",
     "typescript",
     "tailwind",
-    "shadcn"
+    "shadcn",
+    "baas",
+    "supabase",
+    "firebase",
+    "clerk",
+    "prisma"
   ],
   "author": "Mohamed Shaban",
   "license": "MIT",

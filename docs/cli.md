@@ -2,35 +2,40 @@
 
 ## Commands
 
-### `nexo create [name]`
+### `npx create-nexo [name]`
 
 Create a new project interactively.
 
 ```bash
-nexo create my-app
-nexo create my-app --parallel
-nexo create my-app --dry-run
-nexo create my-app --cicd
-nexo create my-app --preset=saas
+npx create-nexo my-app
+npx create-nexo my-app --parallel
+npx create-nexo my-app --dry-run
+npx create-nexo my-app --preset=saas
+npx create-nexo my-app --template=user/repo
+npx create-nexo my-app --rtl
 ```
 
 | Option | Description |
 |--------|-------------|
+| `-d, --dir <directory>` | Target directory (default: `.`) |
+| `--dry-run` | Preview changes without creating files |
+| `-p, --preset <preset>` | Use a preset (saas, dashboard, landing, etc.) |
 | `--parallel` | Enable parallel execution (faster) |
-| `--dry-run` | Preview without creating files |
-| `--cicd` | Include GitHub Actions workflow |
-| `-p, --preset=<name>` | Use a preset configuration |
-| `--rtl` | **[New]** Enable Arabic & RTL support (Cairo font, rtl dir) |
+| `--template <repo>` | Clone a project from a GitHub template |
+| `--rtl` | Enable Arabic & RTL support (Cairo font, rtl dir) |
+| `--audit` | Enable security audit during installation |
+| `--strict` | Enable strict dependency resolution |
+| `--learn` | Enable educational mode with explanations |
 
 ---
 
-### `nexo wizard` / `nexo w`
+### `npx -p create-nexo nexo wizard` / `w`
 
 Beginner-friendly wizard mode with project type recommendations.
 
 ```bash
-nexo wizard
-nexo w
+npx -p create-nexo nexo wizard
+npx -p create-nexo nexo w
 ```
 
 **Project Types:**
@@ -41,73 +46,67 @@ nexo w
 - 👤 Portfolio
 - 🛒 E-Commerce
 
+| Option | Description |
+|--------|-------------|
+| `-d, --dir <directory>` | Target directory (default: `.`) |
+| `--audit` | Enable security audit during installation |
+| `--strict` | Enable strict dependency resolution |
+
 ---
 
-### `nexo generate <type> <name>` / `nexo g`
+### `npx -p create-nexo nexo generate` (Planned)
+
+> [!NOTE]
+> This command is currently in development and will be available in a future release.
 
 Generate components, hooks, pages, or features.
 
 ```bash
-# Components
-nexo generate component Button
-nexo gc Button
-nexo gc Button --with-tests --with-styles --with-index
-nexo gc Button -d src/components/ui
-
-# Hooks
-nexo generate hook useAuth
-nexo gh useAuth
-
-# Pages
-nexo generate page Dashboard
-
-# Features (FSD style)
-nexo generate feature auth
+# Future Usage:
+# npx -p create-nexo nexo generate component Button
+# npx -p create-nexo nexo gc Button
 ```
-
-| Option | Description |
-|--------|-------------|
-| `--with-tests` | Include test file |
-| `--with-styles` | Include style file |
-| `--with-index` | Include index.ts export |
-| `-d, --directory` | Custom output directory |
-| `--js` | Use JavaScript instead of TypeScript |
 
 ---
 
-### `nexo check`
+### `npx -p create-nexo nexo check`
 
 Run system & project health checks.
 
 ```bash
-nexo check
-nexo check --system
-nexo check --project
+npx -p create-nexo nexo check
+npx -p create-nexo nexo check --system
+npx -p create-nexo nexo check --project
 ```
 
 **Checks:**
 - **System**: Node.js version, npm/pnpm/yarn availability, Git installation.
-- **Project**: Dependency audits, structural integrity, and best practice alignment.
+- **Project**: Security audit, lockfile check, best practices, and bundle analysis.
+
+| Option | Description |
+|--------|-------------|
+| `-s, --system` | Run system checks only |
+| `-p, --project` | Run project checks only |
 
 ---
 
-### `nexo presets`
+### `npx -p create-nexo nexo presets`
 
 List available project presets.
 
 ```bash
-nexo presets
+npx -p create-nexo nexo presets
 ```
 
-**Available Presets:**
-- `saas` - SaaS starter with auth, i18n, dashboard
-- `landing` - Landing page with animations
-- `dashboard` - Admin dashboard template
-- `portfolio` - Personal portfolio template
-- `ecommerce` - E-commerce store template
-- `blog-docs` - Blog and documentation template
-- `components-ui` - UI component library template
-- `[Custom]` - Your saved presets from `nexo create`
+---
+
+### `npx -p create-nexo nexo update`
+
+Self-update Nexo CLI to the latest version.
+
+```bash
+npx -p create-nexo nexo update
+```
 
 ---
 
@@ -117,37 +116,4 @@ nexo presets
 |--------|-------------|
 | `-v, --version` | Show version number |
 | `-h, --help` | Show help |
-
----
-
-## Examples
-
-### Create a full-featured SaaS project
-
-```bash
-nexo create my-saas --preset=saas --cicd
-```
-
-### Create with parallel execution
-
-```bash
-nexo create my-app --parallel
-```
-
-### Preview project structure
-
-```bash
-nexo create my-app --dry-run
-```
-
-### Create an Arabic & RTL project
-
-```bash
-nexo create my-arabic-app --rtl
-```
-
-### Generate feature with tests
-
-```bash
-nexo gc UserProfile --with-tests --with-styles
-```
+| `--verbose` | Enable verbose output for detailed logs |
