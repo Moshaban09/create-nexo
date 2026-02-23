@@ -33,12 +33,14 @@ export const languageConfigurator = async (ctx: ConfiguratorContext): Promise<vo
           noUnusedLocals: true,
           noUnusedParameters: true,
           noFallthroughCasesInSwitch: true,
-          ...(ctx.selections.importAlias ? {
-            baseUrl: '.',
-            paths: {
-              '@/*': ['./src/*'],
-            },
-          } : {})
+          ...(ctx.selections.importAlias
+            ? {
+                baseUrl: '.',
+                paths: {
+                  '@/*': ['./src/*'],
+                },
+              }
+            : {}),
         },
         include: ['src'],
         references: [{ path: './tsconfig.node.json' }],
@@ -105,18 +107,18 @@ export default tseslint.config(
     await writeFile(path.join(ctx.projectPath, 'eslint.config.js'), eslintConfig);
 
     // Add ESLint dependencies
-    ctx.pkg.add('eslint', '^9.15.0', true);
-    ctx.pkg.add('eslint-plugin-react-hooks', '^5.0.0', true);
+    ctx.pkg.add('eslint', '^9.29.0', true);
+    ctx.pkg.add('eslint-plugin-react-hooks', '^5.2.0', true);
     ctx.pkg.add('eslint-plugin-react-refresh', '^0.4.14', true);
     ctx.pkg.add('globals', '^15.12.0', true);
     ctx.pkg.add('typescript-eslint', '^8.15.0', true);
-    ctx.pkg.add('@eslint/js', '^9.15.0', true);
+    ctx.pkg.add('@eslint/js', '^9.29.0', true);
   }
 
   // VS Code Settings to fix schema errors
   await ensureDir(path.join(ctx.projectPath, '.vscode'));
   await writeJson(path.join(ctx.projectPath, '.vscode', 'settings.json'), {
-    "json.schemas": [],
-    "typescript.tsdk": "node_modules/typescript/lib"
+    'json.schemas': [],
+    'typescript.tsdk': 'node_modules/typescript/lib',
   });
 };

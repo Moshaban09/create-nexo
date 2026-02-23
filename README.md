@@ -96,17 +96,41 @@ npm create nexo@latest
 > [!TIP]
 > **Execution**: Always use `npx create-nexo` for the default command or `npx -p create-nexo nexo [command]` for specific actions.
 
+### Project Creation
+
+```bash
+# Interactive mode (Recommended for first-time users)
+npx create-nexo my-app
+
+# Quick setup with a preset
+npx create-nexo my-app --preset=dashboard
+
+# Arabic & RTL support
+npx create-nexo my-app --rtl
+
+# Preview changes without creating files
+npx create-nexo my-app --dry-run
+```
+
+### Commands Reference
+
 | Command | Description |
 |---------|-------------|
-| `npx create-nexo` | Start a new project with interactive prompts |
-| `npx create-nexo --audit` | Enable security audit during installation |
-| `npx create-nexo --strict` | Enable strict dependency resolution |
-| `npx create-nexo --template` | Clone a project from a GitHub template |
-| `npx create-nexo --rtl` | Create an Arabic & RTL project instantly |
+| `npx create-nexo <app-name>` | Start a new project with interactive prompts |
+| `npx create-nexo <app-name> --preset=dashboard` | Use a preset (saas, dashboard, landing, etc.) |
+| `npx create-nexo <app-name> --rtl` | Enable Arabic & RTL support |
+| `npx create-nexo <app-name> --dry-run` | Preview changes without creating files |
+| `npx create-nexo <app-name> --audit` | Enable security audit during installation |
+| `npx create-nexo <app-name> --strict` | Enable strict dependency resolution |
+
+### Utility Commands
+
+| Command | Description |
+|---------|-------------|
 | `npx -p create-nexo nexo wizard` | Guided project creation for beginners (Alias: `w`) |
-| `npx -p create-nexo nexo presets` | List and use optimized project presets |
-| `npx -p create-nexo nexo check` | Run system & project health checks (Flags: `--system`, `--project`) |
-| `npx -p create-nexo nexo update` | Self-update Nexo CLI to the latest version |
+| `npx -p create-nexo nexo presets` | List available project presets |
+| `npx -p create-nexo nexo check` | Run system & project health checks |
+| `npx -p create-nexo nexo update` | Self-update to the latest version |
 
 ---
 

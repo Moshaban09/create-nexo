@@ -16,14 +16,14 @@ const CACHE_TTL_MS = 3600000; // 1 hour
 // Built-in stable versions fallback
 const FALLBACK_VERSIONS: Record<string, string> = {
   // React ecosystem
-  'react': '^19.0.0',
+  react: '^19.0.0',
   'react-dom': '^19.0.0',
   '@vitejs/plugin-react': '^4.3.4',
 
   // State management
-  'zustand': '^5.0.0',
+  zustand: '^5.0.0',
   '@reduxjs/toolkit': '^2.5.0',
-  'jotai': '^2.11.0',
+  jotai: '^2.11.0',
 
   // Routing
   'react-router-dom': '^7.13.0',
@@ -31,15 +31,37 @@ const FALLBACK_VERSIONS: Record<string, string> = {
 
   // Data fetching
   '@tanstack/react-query': '^5.64.0',
-  'axios': '^1.7.0',
+  axios: '^1.7.0',
 
   // Forms
   'react-hook-form': '^7.54.0',
-  'zod': '^3.24.0',
+  zod: '^3.24.0',
 
   // UI
-  'tailwindcss': '^4.0.0',
+  tailwindcss: '^4.0.0',
   'lucide-react': '^0.553.0',
+
+  // ESLint ecosystem (pinned to v9 – plugins don't support v10 yet)
+  eslint: '^9.29.0',
+  '@eslint/js': '^9.29.0',
+  globals: '^16.0.0',
+  'typescript-eslint': '^8.33.0',
+  'eslint-plugin-react-hooks': '^5.2.0',
+  'eslint-plugin-react-refresh': '^0.4.20',
+};
+
+/**
+ * Packages that must stay within a specific semver major version.
+ * Used to prevent "latest" from jumping to a breaking major release.
+ *
+ * Key   = package name
+ * Value = maximum allowed major version (inclusive)
+ */
+export const MAX_MAJOR_CONSTRAINTS: Record<string, number> = {
+  // ESLint v10 broke peer-dep compatibility with most plugins (Feb 2026).
+  // Keep on v9 until the ecosystem catches up.
+  eslint: 9,
+  '@eslint/js': 9,
 };
 
 // ============================================
@@ -160,29 +182,64 @@ export const getLatestVersion = async (packageName: string): Promise<string> => 
     return FALLBACK_VERSIONS[packageName] || 'latest';
   }
 
+  // Determine if this package has a max-major ceiling
+  const maxMajor = MAX_MAJOR_CONSTRAINTS[packageName];
+
   try {
-    const response = await fetchWithTimeout(
-      `${NPM_REGISTRY_URL}/${packageName}/latest`,
-      { headers: { 'Accept': 'application/json' } }
-    );
+    let resolvedVersion: string;
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
+    if (maxMajor !== undefined) {
+      // Fetch the dist-tag for the specific major series (e.g. "latest-9" or "v9-latest")
+      // npm uses the full package metadata to list versions; we pick the highest in the allowed major.
+      const response = await fetchWithTimeout(
+        `${NPM_REGISTRY_URL}/${encodeURIComponent(packageName)}`,
+        { headers: { Accept: 'application/json' } }
+      );
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = (await response.json()) as {
+        versions: Record<string, unknown>;
+        'dist-tags': Record<string, string>;
+      };
+      const allVersions = Object.keys(data.versions ?? {});
+
+      // Filter to allowed major and pick the highest patch
+      const compatible = allVersions
+        .filter((v) => {
+          const match = v.match(/^(\d+)\./);
+          return match && parseInt(match[1], 10) <= maxMajor;
+        })
+        .sort((a, b) => {
+          // Simple semver compare (no pre-release handling needed here)
+          const parts = (v: string) => v.split('.').map(Number);
+          const [aMaj, aMin, aPat] = parts(a);
+          const [bMaj, bMin, bPat] = parts(b);
+          return bMaj - aMaj || bMin - aMin || bPat - aPat;
+        });
+
+      if (compatible.length === 0) throw new Error('No compatible version found');
+
+      resolvedVersion = `^${compatible[0]}`;
+    } else {
+      // Normal path: just use /latest dist-tag
+      const response = await fetchWithTimeout(
+        `${NPM_REGISTRY_URL}/${encodeURIComponent(packageName)}/latest`,
+        { headers: { Accept: 'application/json' } }
+      );
+
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+      const data = (await response.json()) as PackageInfo;
+      resolvedVersion = `^${data.version}`;
     }
-
-    const data = await response.json() as PackageInfo;
-    const version = `^${data.version}`;
 
     // Cache the result
-    setCache(`version:${packageName}`, version);
-
-    return version;
+    setCache(`version:${packageName}`, resolvedVersion);
+    return resolvedVersion;
   } catch {
     // Fallback to built-in versions
-    if (FALLBACK_VERSIONS[packageName]) {
-      return FALLBACK_VERSIONS[packageName];
-    }
-    return 'latest';
+    return FALLBACK_VERSIONS[packageName] ?? 'latest';
   }
 };
 
@@ -210,9 +267,7 @@ export const checkNetworkConnectivity = async (): Promise<boolean> => {
 /**
  * Get multiple package versions in parallel
  */
-export const getPackageVersions = async (
-  packages: string[]
-): Promise<Record<string, string>> => {
+export const getPackageVersions = async (packages: string[]): Promise<Record<string, string>> => {
   const results: Record<string, string> = {};
 
   await Promise.all(
@@ -232,9 +287,15 @@ let prefetchPromise: Promise<void> | null = null;
 
 // Common packages to prefetch
 const PREFETCH_PACKAGES = [
-  'react', 'react-dom', 'zustand', 'react-router-dom',
-  '@tanstack/react-query', 'react-hook-form', 'zod',
-  'tailwindcss', 'lucide-react',
+  'react',
+  'react-dom',
+  'zustand',
+  'react-router-dom',
+  '@tanstack/react-query',
+  'react-hook-form',
+  'zod',
+  'tailwindcss',
+  'lucide-react',
 ];
 
 /**
