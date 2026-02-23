@@ -113,6 +113,8 @@ export default tseslint.config(
     ctx.pkg.add('globals', '^15.12.0', true);
     ctx.pkg.add('typescript-eslint', '^8.15.0', true);
     ctx.pkg.add('@eslint/js', '^9.29.0', true);
+    // Fix ReDoS vulnerability in eslint@9.x's bundled minimatch
+    ctx.pkg.addOverride('minimatch', '^10.0.0');
   }
 
   // VS Code Settings to fix schema errors

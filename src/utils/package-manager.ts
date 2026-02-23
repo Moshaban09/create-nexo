@@ -9,6 +9,7 @@ export class PackageManager {
   private dependencies: Map<string, string> = new Map();
   private devDependencies: Map<string, string> = new Map();
   private scripts: Map<string, string> = new Map();
+  private overrides: Map<string, string> = new Map();
 
   constructor(projectPath: string) {
     this.projectPath = projectPath;
@@ -30,6 +31,9 @@ export class PackageManager {
     if (this.pkg.scripts) {
       Object.entries(this.pkg.scripts).forEach(([k, v]) => this.scripts.set(k, v));
     }
+    if (this.pkg.overrides) {
+      Object.entries(this.pkg.overrides as Record<string, string>).forEach(([k, v]) => this.overrides.set(k, v));
+    }
   }
 
   /**
@@ -48,6 +52,13 @@ export class PackageManager {
    */
   addScript(name: string, command: string): void {
     this.scripts.set(name, command);
+  }
+
+  /**
+   * Add a dependency override
+   */
+  addOverride(name: string, version: string): void {
+    this.overrides.set(name, version);
   }
 
   /**
@@ -137,6 +148,9 @@ export class PackageManager {
     this.pkg.dependencies = sortMap(this.dependencies);
     this.pkg.devDependencies = sortMap(this.devDependencies);
     this.pkg.scripts = sortMap(this.scripts);
+    if (this.overrides.size > 0) {
+      this.pkg.overrides = sortMap(this.overrides);
+    }
 
     await writeJson(path.join(this.projectPath, 'package.json'), this.pkg);
   }
